@@ -1,0 +1,7 @@
+{
+  "jdbc": {
+    "url": "jdbc:sqlite:conf/eve.db",
+    "driver_class_name": "",
+    "max_pool_size": 30
+  }
+}
