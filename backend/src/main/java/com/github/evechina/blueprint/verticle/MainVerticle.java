@@ -8,6 +8,7 @@ import io.vertx.core.Verticle;
 import io.vertx.core.json.JsonObject;
 import io.vertx.reactivex.core.AbstractVerticle;
 import io.vertx.reactivex.core.Vertx;
+import io.vertx.reactivex.core.file.FileSystem;
 import io.vertx.reactivex.ext.jdbc.JDBCClient;
 import io.vertx.reactivex.ext.sql.SQLClient;
 
@@ -17,7 +18,8 @@ public class MainVerticle extends AbstractVerticle {
 
   @Override
   public Completable rxStart() {
-    JsonObject jdbc = config().getJsonObject("jdbc");
+    JsonObject config = getConfig();
+    JsonObject jdbc = config.getJsonObject("jdbc");
     client = initSQLClient(vertx, jdbc);
     BluePrintService.init(client);
     return deploy(new HttpVerticle()).ignoreElement();
@@ -41,7 +43,25 @@ public class MainVerticle extends AbstractVerticle {
     return deploy(verticle, deploymentOptions);
   }
 
+  /**
+   * 优先获取当前目录下的配置文件, 如果没有, 则从默认的config中获取
+   *
+   * @return 配置信息
+   */
+  private JsonObject getConfig() {
+    String defaultPath = "conf/config.json";
+    FileSystem fileSystem = vertx.fileSystem();
+    if (fileSystem.existsBlocking(defaultPath)) {
+      return fileSystem.readFileBlocking(defaultPath).toJsonObject();
+    }
+    JsonObject config = config();
+    return config;
+  }
+
   public static JDBCClient initSQLClient(Vertx vertx, JsonObject jdbcConfig) {
+    if (null == jdbcConfig) {
+      throw new RuntimeException("请配置数据源信息");
+    }
     String providerClass = jdbcConfig.getString("provider_class");
     String url = jdbcConfig.getString("jdbcUrl");
     String driverClass = jdbcConfig.getString("driverClassName");
