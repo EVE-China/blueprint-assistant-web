@@ -1,6 +1,6 @@
 package com.github.evechina.blueprint.service;
 
-import domain.BluePrint;
+import domain.*;
 import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
 import io.vertx.core.json.JsonArray;
@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -62,5 +63,96 @@ public class BluePrintService {
         return Single.error(new RuntimeException("按名称查询蓝图失败", e));
       }
     }).observeOn(Schedulers.io());
+  }
+
+  /**
+   * 获取指定蓝图的制造业数据
+   *
+   * @param typeId 蓝图编号
+   * @return 制造业数据
+   */
+  public Single<Manufacturing> getManufacturing(int typeId) {
+    String sql = "select ba.time from blueprint_activity ba where ba.id = ? and ba.type = 2;";
+    JsonArray params = new JsonArray().add(typeId);
+    return client.rxQueryWithParams(sql, params).flatMap(resultSet -> {
+      if (resultSet.getNumRows() == 0) {
+        return Single.error(new RuntimeException("该蓝图不能进行制造"));
+      }
+      List<JsonObject> rows = resultSet.getRows();
+      long time = rows.get(0).getLong("time");
+      Manufacturing manufacturing = new Manufacturing();
+      manufacturing.setTime(time);
+      return Single.just(typeId).flatMap(id -> {
+        // Materials
+        return getBluePrintMaterials(id).flatMap(materials -> {
+          manufacturing.setMaterials(materials);
+          return Single.just(id);
+        });
+      }).flatMap(id -> {
+        // Product
+        return getBluePrintProduct(id).flatMap(product -> {
+          manufacturing.setProduct(product);
+          return Single.just(manufacturing);
+        });
+      });
+    }).observeOn(Schedulers.io());
+  }
+
+  private Single<List<Item>> getBluePrintMaterials(int id) {
+    String sql = "select bm.typeId as id, ti.value as name, t.volume, bm.quantity from blueprint_material bm left join type t on bm.typeId = t.id left join type_i18n ti on t.id = ti.typeId where bm.id = ? and bm.activityType = 2 and ti.language = 'zh' and ti.key = 'name';";
+    List<Item> materials = new ArrayList<>();
+    JsonArray params = new JsonArray().add(id);
+    return client.rxQueryWithParams(sql, params).flatMap(resultSet -> {
+      List<JsonObject> rows = resultSet.getRows();
+      for (JsonObject row : rows) {
+        int materialId = row.getInteger("id");
+        String name = row.getString("name");
+        float volume = row.getFloat("volume");
+        Type type = new Type(materialId, name, volume);
+        long quantity = row.getLong("quantity");
+        materials.add(new Item(type, quantity));
+      }
+      return Single.just(materials);
+    });
+  }
+
+  /**
+   * 暂时不涉及技能
+   */
+  private Map<Skill, Integer> getBluePrintSkills(int id) {
+    /*String sql = "select bs.typeId as id, ti.value as name, bs.level as level from blueprint_skill bs left join type_i18n ti on bs.typeId = ti.typeId where bs.id = ? and bs.activityType = 2 and ti.language = 'zh' and ti.key = 'name';";
+    Map<Skill, Integer> skills = new HashMap<>();
+    try (PreparedStatement prepareStatement = connection.prepareStatement(sql)) {
+      prepareStatement.setInt(1, id);
+      ResultSet resultSet = prepareStatement.executeQuery();
+      while (resultSet.next()) {
+        int skillId = resultSet.getInt("id");
+        String name = resultSet.getString("name");
+        int level = resultSet.getInt("level");
+        Skill skill = new Skill(skillId, name, level, level);
+        skills.put(skill, level);
+      }
+      resultSet.close();
+      return skills;
+    } catch (SQLException e) {
+      throw new ProjectException("查询蓝图技能失败", e);
+    }*/
+    return null;
+  }
+
+  private Single<Item> getBluePrintProduct(int id) {
+    String sql = "select bp.typeId as id, ti.value as name, t.volume as volume, bp.quantity as quantity from blueprint_product bp left join type t on bp.typeId = t.id left join type_i18n ti on bp.typeId = ti.typeId where bp.id = ? and bp.activityType = 2 and ti.language = 'zh' and ti.key = 'name';";
+    JsonArray params = new JsonArray().add(id);
+    return client.rxQueryWithParams(sql, params).flatMap(resultSet -> {
+      List<JsonObject> rows = resultSet.getRows();
+      JsonObject row = rows.get(0);
+      int productId = row.getInteger("id");
+      String productName = row.getString("name");
+      float volume = row.getFloat("volume");
+      long quantity = row.getLong("quantity");
+      Type type = new Type(productId, productName, volume);
+      Item item = new Item(type, quantity);
+      return Single.just(item);
+    });
   }
 }

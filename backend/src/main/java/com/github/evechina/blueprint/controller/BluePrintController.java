@@ -2,7 +2,6 @@ package com.github.evechina.blueprint.controller;
 
 import com.github.evechina.blueprint.service.BluePrintService;
 import io.vertx.core.json.Json;
-import io.vertx.core.json.JsonObject;
 import io.vertx.reactivex.core.Vertx;
 import io.vertx.reactivex.ext.web.Router;
 import io.vertx.reactivex.ext.web.RoutingContext;
@@ -17,6 +16,7 @@ public class BluePrintController {
 
   public static String mount(Vertx vertx, Router router) {
     BluePrintController controller = new BluePrintController();
+    router.get("/:typeId/manufacturing").handler(controller::getManufacturingByTypeId);
     router.get().handler(controller::findAllByName);
     return "/blueprints";
   }
@@ -25,11 +25,21 @@ public class BluePrintController {
     String name = ctx.request().getParam("name");
     bluePrintService.findAllByName(name).subscribe(bluePrints -> {
       ctx.response().end(Json.encode(bluePrints));
-    }, e -> {
-      log.error("按名称查询蓝图失败", e);
-      JsonObject rsp = new JsonObject().put("msg", e.getMessage());
-      ctx.response().setStatusCode(500).end(rsp.encodePrettily());
-    });
+    }, ctx::fail);
+  }
+
+  private void getManufacturingByTypeId(RoutingContext ctx) {
+    String typeIdStr = ctx.request().getParam("typeId");
+    int typeId = 0;
+    try {
+      typeId = Integer.parseInt(typeIdStr);
+    } catch (NumberFormatException e) {
+      log.error("typeId非法", e);
+      ctx.response().setStatusCode(500).end();
+    }
+    bluePrintService.getManufacturing(typeId).subscribe(manufacturing -> {
+      ctx.response().end(Json.encode(manufacturing));
+    }, ctx::fail);
   }
 
 }
