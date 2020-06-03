@@ -1,6 +1,7 @@
 package com.github.evechina.blueprint.verticle;
 
 import com.github.evechina.blueprint.controller.BluePrintController;
+import com.github.evechina.blueprint.controller.TypeController;
 import io.reactivex.Completable;
 import io.vertx.core.http.HttpHeaders;
 import io.vertx.core.json.JsonObject;
@@ -37,9 +38,10 @@ public class HttpVerticle extends AbstractVerticle {
       Throwable throwable = ctx.failure();
       log.error("捕获未处理异常", throwable);
       rsp.put("msg", null != throwable ? throwable.getMessage() : "未知错误");
-      ctx.response().setStatusCode(500).end(rsp.encodePrettily());
+      ctx.response().setStatusCode(500).end(rsp.encode());
     });
     mountSubRouter(router, sub -> BluePrintController.mount(vertx, sub));
+    mountSubRouter(router, sub -> TypeController.mount(vertx, sub));
     return vertx.createHttpServer()
       .requestHandler(router)
       .rxListen(8080)

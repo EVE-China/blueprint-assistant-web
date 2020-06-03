@@ -1,6 +1,7 @@
 package com.github.evechina.blueprint.verticle;
 
 import com.github.evechina.blueprint.service.BluePrintService;
+import com.github.evechina.blueprint.service.PriceService;
 import io.reactivex.Completable;
 import io.reactivex.Single;
 import io.vertx.core.DeploymentOptions;
@@ -22,6 +23,7 @@ public class MainVerticle extends AbstractVerticle {
     JsonObject jdbc = config.getJsonObject("jdbc");
     client = initSQLClient(vertx, jdbc);
     BluePrintService.init(client);
+    PriceService.init(vertx);
     return deploy(new HttpVerticle()).ignoreElement();
   }
 
