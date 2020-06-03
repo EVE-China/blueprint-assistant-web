@@ -1,0 +1,34 @@
+:host {
+  display: flex;
+}
+
+.search {
+  min-width: 220px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  padding: 10px;
+
+  & .list {
+
+    & .item {
+      display: flex;
+      align-items: center;
+
+      & img {
+        width: 32px;
+        height: 32px;
+        margin-right: .5em;
+      }
+    }
+  }
+}
+
+.tabs {
+  flex-grow: 1;
+}
+
+.bonus {
+  width: 200px;
+}
