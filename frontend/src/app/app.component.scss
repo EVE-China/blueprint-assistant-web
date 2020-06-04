@@ -1,25 +1,59 @@
 :host {
   display: flex;
+  height: 100vh;
+}
+
+:host ::ng-deep .custom-list-style {
+
+  .mat-list-item-content {
+    padding: 0 5px !important;
+
+    .mat-list-text {
+      padding-right: 0 !important;
+    }
+  }
 }
 
 .search {
-  min-width: 220px;
+  width: 220px;
   height: 100%;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  box-sizing: border-box;
-  padding: 10px;
+  flex-shrink: 0;
+  border-right: 1px solid #a2a2a2;
 
-  & .list {
+  .mat-form-field {
+    padding: 0 10px;
+  }
 
-    & .item {
-      display: flex;
-      align-items: center;
+  .list {
+    flex-grow: 1;
 
-      & img {
-        width: 32px;
-        height: 32px;
-        margin-right: .5em;
+    .virtual-scroll-viewport {
+      height: 100%;
+      width: 100%;
+
+      & > ::ng-deep.cdk-virtual-scroll-content-wrapper {
+        width: 100% !important;
+      }
+
+      .item {
+        display: flex;
+        align-items: center;
+
+        img {
+          width: 32px;
+          height: 32px;
+          margin-right: .5em;
+        }
+
+        span {
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          width: 100%;
+        }
       }
     }
   }
@@ -27,8 +61,17 @@
 
 .tabs {
   flex-grow: 1;
+  background-color: #f3f3f3;
+  overflow: hidden;
+
+  .tab-close-btn {
+    color: black;
+    position: absolute;
+    right: 0;
+  }
 }
 
 .bonus {
   width: 200px;
+  flex-shrink: 0;
 }

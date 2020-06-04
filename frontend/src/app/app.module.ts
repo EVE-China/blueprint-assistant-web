@@ -7,17 +7,35 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { HttpClientModule } from '@angular/common/http';
+import { ScrollingModule } from '@angular/cdk/scrolling';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { BluePrintDetailComponent } from './component/blue-print-detail/blue-print-detail.component';
+import { FormsModule } from '@angular/forms';
+import { MatTableModule } from '@angular/material/table';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    BluePrintDetailComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),
     BrowserAnimationsModule,
     MatFormFieldModule,
     MatInputModule,
-    MatListModule
+    MatListModule,
+    MatSnackBarModule,
+    HttpClientModule,
+    ScrollingModule,
+    MatTabsModule,
+    MatIconModule,
+    MatButtonModule,
+    FormsModule,
+    MatTableModule
   ],
   providers: [],
   bootstrap: [AppComponent]

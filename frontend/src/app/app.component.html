@@ -3,16 +3,30 @@
     <input matInput name="bluePrintName" #bluePrintName placeholder="蓝图名称">
   </mat-form-field>
   <mat-selection-list class="list" [multiple]="false">
-    <mat-list-option>
-      <div class="item">
-        <img src="https://image.evepc.163.com/Type/681_32.png">
-        <span>鞭挞巡航导弹</span>
+    <cdk-virtual-scroll-viewport itemSize="32" class="virtual-scroll-viewport">
+      <div *cdkVirtualFor="let bluePrint of bluePrints">
+        <mat-list-option class="custom-list-style">
+          <div class="item">
+            <img [src]="'https://image.evepc.163.com/Type/' + bluePrint.id + '_32.png'">
+            <span>{{ bluePrint.name }}</span>
+          </div>
+        </mat-list-option>
       </div>
-    </mat-list-option>
+    </cdk-virtual-scroll-viewport>
   </mat-selection-list>
 </div>
 <div class="tabs">
-  tabs
+  <mat-tab-group mat-align-tabs="start">
+    <mat-tab label="First">
+      <ng-template mat-tab-label>
+				<div class="col">First</div>
+				<button class="tab-close-btn" mat-icon-button>
+        <mat-icon>close</mat-icon>
+      </button>
+    </ng-template>
+      <app-blue-print-detail></app-blue-print-detail>
+    </mat-tab>
+  </mat-tab-group>
 </div>
 <div class="bonus">
   bonus

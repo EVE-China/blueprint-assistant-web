@@ -1,0 +1,88 @@
+.hbox {
+  display: flex;
+  flex-direction: row;
+}
+
+.vbox {
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  padding: 7px;
+
+  & > .logo {
+    height: 64px;
+    width: 64px;
+    margin-right: 7px;
+  }
+
+  .title {
+    line-height: 28px;
+    font-size: 22px;
+    font-weight: 1.2;
+    cursor: default;
+  }
+
+  .bonus {
+    height: 32px;
+    align-items: center;
+
+    img {
+      height: 17px;
+      width: 17px;
+      margin-right: 1px;
+    }
+
+    .research {
+      text-align: right;
+      width: 1.13em;
+      border-radius: 0;
+      padding: 0 1px;
+      color: #3371b6;
+      background-color: transparent;
+      border-width: 0 0 1px 0;
+      border-style: none none solid none;
+      border-color: #b6b6b6;
+      outline: none;
+      font-weight: bold;
+      transition: border-color .5s;
+      -moz-appearance: textfield;
+
+      &:focus {
+        border-color: #3371b6;
+      }
+
+      &::-webkit-outer-spin-button,
+      &::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+      }
+    }
+    .percent {
+      color: #3371b6;
+      margin-right: 6px;
+      cursor: default;
+    }
+  }
+}
+
+.material-tab {
+  margin: 0 6px;
+
+  .material-name {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    .material-logo {
+      width: 24px;
+      height: 24px;
+      margin-right: 6px;
+    }
+  }
+
+  tr:hover {
+    background: whitesmoke;
+  }
+
+}
