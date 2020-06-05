@@ -16,11 +16,13 @@ import { MatButtonModule } from '@angular/material/button';
 import { BluePrintDetailComponent } from './component/blue-print-detail/blue-print-detail.component';
 import { FormsModule } from '@angular/forms';
 import { MatTableModule } from '@angular/material/table';
+import { NumberOnlyDirective } from './directive/number-only.directive';
 
 @NgModule({
   declarations: [
     AppComponent,
-    BluePrintDetailComponent
+    BluePrintDetailComponent,
+    NumberOnlyDirective
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),
