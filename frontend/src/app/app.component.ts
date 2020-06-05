@@ -3,6 +3,7 @@ import { Observable, fromEvent } from 'rxjs';
 import { BluePrintService } from 'src/service/blue-print.service';
 import { BluePrint } from 'src/service/vo/blue-print';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -26,8 +27,8 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.onSearch();
   }
 
-  onSearch() {
-    this.bluePrintService.findAllByName('').subscribe(bluePrints => {
+  onSearch(name = '') {
+    this.bluePrintService.findAllByName(name).subscribe(bluePrints => {
       this.bluePrints = bluePrints;
     }, err => {
       this.snackBar.open(err.message, '');
@@ -35,9 +36,10 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    fromEvent(this.bluePrintNameInput.nativeElement, 'change')
+    fromEvent<any>(this.bluePrintNameInput.nativeElement, 'input')
+      .pipe(debounceTime(300))
       .subscribe(event => {
-        this.onSearch();
+        this.onSearch(event.target.value);
       });
   }
 }
