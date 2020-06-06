@@ -13,7 +13,7 @@
       <input class="number-input" style="width: 37px;" type="number" numberOnly min="1" max="99999" value="1" (input)="updateNumberOfProjects($event.target.value)" />
       <label style="color: #3573b5;margin-left: 6px;margin-right: 6px;">生产线:</label>
       <input class="number-input" style="width: 22px;" type="number" numberOnly min="1" max="999" value="1" (input)="updateProductionLines($event.target.value)" />
-      <label style="color: #3573b5;margin-left: 6px;margin-right: 6px;">项目周期/条: {{ '计算中' }}</label>
+      <label style="color: #3573b5;margin-left: 6px;margin-right: 6px;">项目周期/条: {{ totalTime }}</label>
     </div>
   </div>
 </div>

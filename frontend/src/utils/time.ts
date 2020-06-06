@@ -7,7 +7,7 @@ export function formatBySecond(time: number) {
   let index = 0;
   let mod: number;
   do {
-    const tmp = time / UNIT_VALUS[index];
+    const tmp = Math.floor(time / UNIT_VALUS[index]);
     mod = time % UNIT_VALUS[index];
     time = tmp;
     stack.push(mod);
