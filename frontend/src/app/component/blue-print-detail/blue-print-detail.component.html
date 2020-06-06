@@ -1,7 +1,7 @@
 <div class="hbox header">
-  <img class="logo" src="https://image.evepc.163.com/Type/681_64.png">
+  <img class="logo" [src]="'https://image.evepc.163.com/Type/' + bluePrint.id + '_64.png'">
   <div class="vbox">
-    <div class="title">测试标题蓝图</div>
+    <div class="title">{{ bluePrint.name }}</div>
     <div class="hbox bonus">
       <img src="../../../assets/iconME.png" />
       <input type="number" class="research material" numberOnly min="0" max="10" value="10" (input)="updateResearchMaterial($event.target.value)" />
