@@ -152,7 +152,7 @@ export class BluePrintDetailComponent implements OnInit {
     // 总利润
     this.totalProfit = productProfit * this.productTotalQuantity;
     // 利润率
-    this.profitMargin = productProfit / this.product.price.getValue();
+    this.profitMargin = productProfit / this.productCost * 100;
     // 生产耗时
     this.totalTime = formatBySecond(this.getResearchTimePercentage() * this.bluePrint.manufacturing.time);
   }
