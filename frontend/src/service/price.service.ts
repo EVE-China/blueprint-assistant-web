@@ -14,7 +14,7 @@ export class PriceService extends AbstractService {
   }
 
   query(typeId: number): Observable<number> {
-    return this.http.get<any>(`${this.API_PREFIX}/${typeId}/price`)
+    return this.http.get<any>(`${this.API_PREFIX}/type/${typeId}/price`)
       .pipe(this.mapToError(),
         flatMap(rsp => of(rsp.min as number))
       );

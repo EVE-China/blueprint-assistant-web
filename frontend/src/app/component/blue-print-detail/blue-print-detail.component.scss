@@ -71,6 +71,14 @@
 }
 
 .material-tab {
+  height: 120px;
+  overflow: auto;
+  cursor: default;
+
+  table {
+    width: 100%;
+    font-size: 14px;
+  }
 
   .material-name {
     display: flex;
@@ -94,6 +102,8 @@
   border: 1px solid #d9d9d9;
   border-radius: 2px;
   transition: all .3s;
+  padding: 3px 6px;
+  text-align: right;
 
   &::-webkit-outer-spin-button,
   &::-webkit-inner-spin-button {
@@ -106,4 +116,51 @@
     outline: 0;
     box-shadow: 0 0 0 2px rgba(24,144,255,.2);
   }
+}
+
+.sub-title {
+  margin: 6px 0;
+  font-size: 20px;
+  align-items: center;
+  cursor: default;
+}
+
+.product {
+  align-items: center;
+  cursor: default;
+
+  & > .logo {
+    width: 64px;
+    height: 64px;
+  }
+
+  & > .name {
+    font-size: 20px;
+    margin: 6px 0;
+  }
+}
+
+
+.grid {
+  cursor: default;
+
+  .name {
+    width: 100%;
+    text-align: right;
+  }
+
+  .value {
+    width: 100%;
+    text-align: left;
+    font-weight: bold;
+  }
+}
+/* 修改表格默认样式 */
+
+tr.mat-header-row, tr.mat-row {
+  height: unset !important;
+}
+
+.mat-header-cell, .mat-cell {
+  padding: 1px !important;
 }

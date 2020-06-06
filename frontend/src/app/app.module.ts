@@ -17,6 +17,7 @@ import { BluePrintDetailComponent } from './component/blue-print-detail/blue-pri
 import { FormsModule } from '@angular/forms';
 import { MatTableModule } from '@angular/material/table';
 import { NumberOnlyDirective } from './directive/number-only.directive';
+import { MatGridListModule } from '@angular/material/grid-list';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { NumberOnlyDirective } from './directive/number-only.directive';
     MatIconModule,
     MatButtonModule,
     FormsModule,
-    MatTableModule
+    MatTableModule,
+    MatGridListModule
   ],
   providers: [],
   bootstrap: [AppComponent]

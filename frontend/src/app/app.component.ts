@@ -31,7 +31,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.bluePrintService.findAllByName(name).subscribe(bluePrints => {
       this.bluePrints = bluePrints;
     }, err => {
-      this.snackBar.open(err.message, '');
+      this.snackBar.open(err.message, '确定');
     });
   }
 

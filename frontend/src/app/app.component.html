@@ -20,11 +20,11 @@
     <mat-tab label="First">
       <ng-template mat-tab-label>
 				<div class="col">First</div>
-				<button class="tab-close-btn" mat-icon-button>
-        <mat-icon>close</mat-icon>
-      </button>
+				<button class="tab-close-btn" mat-icon-button (click)="$event.stopPropagation();">
+          <mat-icon>close</mat-icon>
+        </button>
     </ng-template>
-      <app-blue-print-detail></app-blue-print-detail>
+      <!-- <app-blue-print-detail></app-blue-print-detail> -->
     </mat-tab>
   </mat-tab-group>
 </div>
