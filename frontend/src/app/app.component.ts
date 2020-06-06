@@ -1,9 +1,9 @@
 import { Component, ViewChild, ElementRef, OnInit, AfterViewInit } from '@angular/core';
-import { Observable, fromEvent } from 'rxjs';
+import { Observable, fromEvent, timer } from 'rxjs';
 import { BluePrintService } from 'src/service/blue-print.service';
 import { BluePrint } from 'src/service/vo/blue-print';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { debounceTime } from 'rxjs/operators';
+import { debounceTime, timeout } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -17,6 +17,13 @@ export class AppComponent implements OnInit, AfterViewInit {
   @ViewChild('bluePrintName') bluePrintNameInput: ElementRef;
 
   bluePrints: BluePrint[] = [];
+
+  /**
+   * tab中的蓝图
+   */
+  selectBluePrints: BluePrint[] = [];
+
+  selectedIndex: number;
 
   constructor(private bluePrintService: BluePrintService,
               private snackBar: MatSnackBar) {
@@ -41,5 +48,31 @@ export class AppComponent implements OnInit, AfterViewInit {
       .subscribe(event => {
         this.onSearch(event.target.value);
       });
+  }
+
+  onSelect(bluePrint: BluePrint) {
+    this.bluePrintService.getManufacturingByTypeId(bluePrint.id)
+      .subscribe(manufacturing => {
+        bluePrint.manufacturing = manufacturing;
+        this.addTab(bluePrint);
+      }, err => {
+        this.snackBar.open(err.message, '确定');
+      });
+  }
+
+  addTab(bluePrint: BluePrint) {
+    const index = this.selectBluePrints.findIndex(v => v.id === bluePrint.id);
+    if (-1 === index) {
+      this.selectBluePrints.push(bluePrint);
+      timer(220).subscribe(() => {
+        this.selectedIndex = this.selectBluePrints.length - 1;
+      });
+    } else {
+      this.selectedIndex = index;
+    }
+  }
+
+  removeTab(bluePrint: BluePrint) {
+    this.selectBluePrints = this.selectBluePrints.filter(item => item.id !== bluePrint.id);
   }
 }
