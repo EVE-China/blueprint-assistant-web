@@ -64,7 +64,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     const index = this.selectBluePrints.findIndex(v => v.id === bluePrint.id);
     if (-1 === index) {
       this.selectBluePrints.push(bluePrint);
-      timer(220).subscribe(() => {
+      timer(1).subscribe(() => {
         this.selectedIndex = this.selectBluePrints.length - 1;
       });
     } else {

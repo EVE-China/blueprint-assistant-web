@@ -16,7 +16,7 @@
   </mat-selection-list>
 </div>
 <div class="tabs">
-  <mat-tab-group mat-align-tabs="start" [(selectedIndex)]="selectedIndex">
+  <mat-tab-group mat-align-tabs="start" [(selectedIndex)]="selectedIndex" animationDuration="0ms">
     <mat-tab label="First" *ngFor="let bluePrint of selectBluePrints; let i = index">
       <ng-template mat-tab-label>
         <div class="col">{{ bluePrint.name }}</div>
