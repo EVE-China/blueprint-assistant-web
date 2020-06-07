@@ -21,7 +21,7 @@ export class AbstractService {
       if (err instanceof HttpErrorResponse) {
         const rsp: HttpErrorResponse = err;
         if (rsp.status !== 200) {
-          if (rsp.error) {
+          if (rsp.error && typeof rsp.error === 'object') {
             error.message = rsp.error.msg;
           }
         }

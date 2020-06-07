@@ -38,7 +38,9 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.bluePrintService.findAllByName(name).subscribe(bluePrints => {
       this.bluePrints = bluePrints;
     }, err => {
-      this.snackBar.open(err.message, '确定');
+      this.snackBar.open(err.message, '确定', {
+        duration: 3000
+      });
     });
   }
 
@@ -56,7 +58,9 @@ export class AppComponent implements OnInit, AfterViewInit {
         bluePrint.manufacturing = manufacturing;
         this.addTab(bluePrint);
       }, err => {
-        this.snackBar.open(err.message, '确定');
+        this.snackBar.open(err.message, '确定', {
+          duration: 3000
+        });
       });
   }
 
