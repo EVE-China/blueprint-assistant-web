@@ -20,12 +20,15 @@ import { NumberOnlyDirective } from './directive/number-only.directive';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ClipboardModule } from '@angular/cdk/clipboard';
+import { BonusComponent } from './component/bonus/bonus.component';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 @NgModule({
   declarations: [
     AppComponent,
     BluePrintDetailComponent,
-    NumberOnlyDirective
+    NumberOnlyDirective,
+    BonusComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),
@@ -43,7 +46,8 @@ import { ClipboardModule } from '@angular/cdk/clipboard';
     MatTableModule,
     MatGridListModule,
     MatTooltipModule,
-    ClipboardModule
+    ClipboardModule,
+    MatExpansionModule
   ],
   providers: [],
   bootstrap: [AppComponent]
