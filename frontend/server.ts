@@ -2,7 +2,7 @@ import 'zone.js/dist/zone-node';
 
 import { ngExpressEngine } from '@nguniversal/express-engine';
 import * as express from 'express';
-import { join } from 'path';
+import { join, sep } from 'path';
 
 import { AppServerModule } from './src/main.server';
 import { APP_BASE_HREF } from '@angular/common';
@@ -11,7 +11,16 @@ import { existsSync } from 'fs';
 // The Express app is exported so that it can be used by serverless Functions.
 export function app() {
   const server = express();
-  const distFolder = join(process.cwd(), 'dist/blueprint-assistant-web/browser');
+  let tmp: string;
+  if (existsSync(join(process.execPath, 'browser'))) {
+    tmp = join(process.execPath, 'browser');
+  } else if (existsSync(join(__dirname, '../browser'))) {
+    tmp = join(__dirname, '../browser');
+  } else {
+    tmp = join(process.cwd(), 'dist/blueprint-assistant-web/browser');
+  }
+  console.log(`distFolder:${tmp}`);
+  const distFolder = tmp;
   const indexHtml = existsSync(join(distFolder, 'index.original.html')) ? 'index.original.html' : 'index';
 
   // Our Universal express-engine (found @ https://github.com/angular/universal/tree/master/modules/express-engine)
