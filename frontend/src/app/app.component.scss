@@ -1,6 +1,8 @@
 :host {
   display: flex;
-  height: 100vh;
+  min-width: 600px;
+  min-height: 360px;
+  height: 100%;
 }
 
 :host ::ng-deep .custom-list-style {
