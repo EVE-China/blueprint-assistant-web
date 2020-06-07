@@ -5,6 +5,7 @@ import { MaterialItem, ProductItem } from './vo';
 import { debounceTime, flatMap } from 'rxjs/operators';
 import { PriceService } from 'src/service/price.service';
 import { formatBySecond } from 'src/utils/time';
+import { Clipboard } from '@angular/cdk/clipboard';
 
 @Component({
   selector: 'app-blue-print-detail',
@@ -79,7 +80,7 @@ export class BluePrintDetailComponent implements OnInit {
    */
   totalTime: string;
 
-  constructor(private priceService: PriceService) { }
+  constructor(private priceService: PriceService, private clipboard: Clipboard) { }
 
   ngOnInit(): void {
     this.materials = this.bluePrint.manufacturing.materials.map(material => {
@@ -161,5 +162,12 @@ export class BluePrintDetailComponent implements OnInit {
     this.profitMargin = productProfit / this.productCost * 100;
     // 生产耗时
     this.totalTime = formatBySecond(this.getResearchTimePercentage() * this.bluePrint.manufacturing.time);
+  }
+
+  onCopy() {
+    const value = this.materials.map(material => {
+      return `${material.name}\t${material.totalQuantity}`;
+    }).join('\n');
+    this.clipboard.copy(value);
   }
 }

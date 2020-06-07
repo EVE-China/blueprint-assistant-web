@@ -18,6 +18,8 @@ import { FormsModule } from '@angular/forms';
 import { MatTableModule } from '@angular/material/table';
 import { NumberOnlyDirective } from './directive/number-only.directive';
 import { MatGridListModule } from '@angular/material/grid-list';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { ClipboardModule } from '@angular/cdk/clipboard';
 
 @NgModule({
   declarations: [
@@ -39,7 +41,9 @@ import { MatGridListModule } from '@angular/material/grid-list';
     MatButtonModule,
     FormsModule,
     MatTableModule,
-    MatGridListModule
+    MatGridListModule,
+    MatTooltipModule,
+    ClipboardModule
   ],
   providers: [],
   bootstrap: [AppComponent]
