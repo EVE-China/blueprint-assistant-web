@@ -1,3 +1,11 @@
+<!-- 等待查询结果占位用 -->
+<ng-template #queryTemplete>
+  查询中
+</ng-template>
+<!-- 等待计算结果占位用 -->
+<ng-template #calcTemplete>
+  计算中
+</ng-template>
 <div class="hbox header">
   <img class="logo" [src]="'https://image.evepc.163.com/Type/' + bluePrint.id + '_64.png'">
   <div class="vbox">
@@ -43,12 +51,20 @@
 
       <ng-container matColumnDef="price">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> 市场单价 </th>
-        <td mat-cell *matCellDef="let element"> {{ element.price.getValue() | number:'1.2-2' }} </td>
+        <td mat-cell *matCellDef="let element">
+          <ng-container *ngIf="element.price.getValue() != -1; else queryTemplete">
+            {{ element.price | async | number:'1.2-2' }}
+          </ng-container>
+        </td>
       </ng-container>
 
       <ng-container matColumnDef="totalPrice">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> 总价 </th>
-        <td mat-cell *matCellDef="let element"> {{ getTotalPrice(element) | number:'1.2-2' }} </td>
+        <td mat-cell *matCellDef="let element">
+          <ng-container *ngIf="element.price.getValue() != -1; else queryTemplete">
+            {{ getTotalPrice(element) | async | number:'1.2-2' }}
+          </ng-container>
+        </td>
       </ng-container>
 
       <ng-container matColumnDef="totalVolume">
@@ -67,9 +83,21 @@
     <img class="logo" [src]="'https://image.evepc.163.com/Type/' + product.id + '_64.png'">
     <span class="name">{{ product.name }}</span>
     <div class="hbox">
-      <span>数量: {{ productTotalQuantity }}</span>
-      <span style="margin-left: 6px;">市场单价: {{ product.price.getValue() | number: '1.2-2' }}</span>
-      <span style="margin-left: 6px;">成本价/件: {{ productCost | number: '1.2-2' }}</span>
+      <span>数量: <strong>{{ productTotalQuantity }}</strong></span>
+      <span style="margin-left: 6px;">市场单价:
+        <strong>
+          <ng-container *ngIf="product.price.getValue() != -1; else queryTemplete">
+            {{ product.price.getValue() | number: '1.2-2' }}
+          </ng-container>
+        </strong>
+      </span>
+      <span style="margin-left: 6px;">成本价/件:
+        <strong>
+          <ng-container *ngIf="productCost; else calcTemplete">
+            {{ productCost | number: '1.2-2' }}
+          </ng-container>
+        </strong>
+      </span>
     </div>
   </div>
 </div>
@@ -82,25 +110,41 @@
       <div class="name">材料预估价格: </div>
     </mat-grid-tile>
     <mat-grid-tile>
-      <div class="value">{{ materialTotalPrice | number:'1.2-2' }}</div>
+      <div class="value">
+        <ng-container *ngIf="materialTotalPrice; else calcTemplete">
+          {{ materialTotalPrice | number:'1.2-2' }}
+        </ng-container>
+      </div>
     </mat-grid-tile>
     <mat-grid-tile>
       <div class="name">产出预估价格: </div>
     </mat-grid-tile>
     <mat-grid-tile>
-      <div class="value">{{ productTotalPrice | number:'1.2-2' }}</div>
+      <div class="value">
+        <ng-container *ngIf="productTotalPrice; else calcTemplete">
+          {{ productTotalPrice | number:'1.2-2' }}
+        </ng-container>
+      </div>
     </mat-grid-tile>
     <mat-grid-tile>
       <div class="name">预估总利润: </div>
     </mat-grid-tile>
     <mat-grid-tile>
-      <div class="value">{{ totalProfit | number: '1.2-2' }}</div>
+      <div class="value">
+        <ng-container *ngIf="totalProfit;else calcTemplete">
+          {{ totalProfit | number: '1.2-2' }}
+        </ng-container>
+      </div>
     </mat-grid-tile>
     <mat-grid-tile>
       <div class="name">预估利润率: </div>
     </mat-grid-tile>
     <mat-grid-tile>
-      <div class="value">{{ profitMargin | number: '1.2-2' }}%</div>
+      <div class="value">
+        <ng-container *ngIf="profitMargin; else calcTemplete">
+          {{ profitMargin | number: '1.2-2' }}%
+        </ng-container>
+      </div>
     </mat-grid-tile>
   </mat-grid-list>
 </div>

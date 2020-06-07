@@ -34,13 +34,16 @@ export class MaterialItem {
    */
   price = new BehaviorSubject(-1);
 
-  constructor(item: Item, priceService: PriceService) {
+  constructor(item: Item, priceService: PriceService, triggerCalc: Function) {
     this.id = item.type.id;
     this.name = item.type.name;
     this.quantity = item.quantity;
     this.totalQuantity = 0;
     this.volume = item.type.volume;
-    priceService.query(this.id).subscribe(this.price);
+    priceService.query(this.id).subscribe(price => {
+      this.price.next(price);
+      triggerCalc();
+    });
   }
 }
 
@@ -71,12 +74,15 @@ export class ProductItem {
    */
   volume: number;
 
-  constructor(product: Item, priceService: PriceService) {
+  constructor(product: Item, priceService: PriceService, triggerCalc: Function) {
     const type = product.type;
     this.id = type.id;
     this.name = type.name;
     this.quantity = product.quantity;
     this.volume = type.volume;
-    priceService.query(this.id).subscribe(this.price);
+    priceService.query(this.id).subscribe(price => {
+      this.price.next(price);
+      triggerCalc();
+    });
   }
 }

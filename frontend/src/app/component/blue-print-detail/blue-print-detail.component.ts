@@ -1,8 +1,8 @@
-import { Component, OnInit, Input, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { BluePrint } from 'src/service/vo/blue-print';
-import { fromEvent, Subject, Observable, of, BehaviorSubject } from 'rxjs';
+import { Subject, of } from 'rxjs';
 import { MaterialItem, ProductItem } from './vo';
-import { debounceTime } from 'rxjs/operators';
+import { debounceTime, flatMap } from 'rxjs/operators';
 import { PriceService } from 'src/service/price.service';
 import { formatBySecond } from 'src/utils/time';
 
@@ -83,11 +83,15 @@ export class BluePrintDetailComponent implements OnInit {
 
   ngOnInit(): void {
     this.materials = this.bluePrint.manufacturing.materials.map(material => {
-      return new MaterialItem(material, this.priceService);
+      return new MaterialItem(material, this.priceService, () => {
+        this.triggerCalc();
+      });
     });
-    this.product = new ProductItem(this.bluePrint.manufacturing.product, this.priceService);
+    this.product = new ProductItem(this.bluePrint.manufacturing.product, this.priceService, () => {
+      this.triggerCalc();
+    });
 
-    this.calcSubject.pipe(debounceTime(150)).subscribe(() => {
+    this.calcSubject.pipe(debounceTime(500)).subscribe(() => {
       this.calc();
     });
     this.triggerCalc();
@@ -132,7 +136,9 @@ export class BluePrintDetailComponent implements OnInit {
   }
 
   getTotalPrice(material: MaterialItem) {
-    return material.price.getValue() * material.totalQuantity;
+    return material.price.pipe(flatMap(price => {
+      return of(price * material.totalQuantity);
+    }));
   }
 
   calc() {
