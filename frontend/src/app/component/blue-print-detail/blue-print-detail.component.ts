@@ -78,7 +78,7 @@ export class BluePrintDetailComponent implements OnInit {
   /**
    * 生产总耗时
    */
-  totalTime: string;
+  totalTimeStr = '计算中';
 
   constructor(private priceService: PriceService, private clipboard: Clipboard) { }
 
@@ -161,7 +161,8 @@ export class BluePrintDetailComponent implements OnInit {
     // 利润率
     this.profitMargin = productProfit / this.productCost * 100;
     // 生产耗时
-    this.totalTime = formatBySecond(this.getResearchTimePercentage() * this.bluePrint.manufacturing.time);
+    const totalTime = this.getResearchTimePercentage() * this.bluePrint.manufacturing.time * this.numberOfProjects;
+    this.totalTimeStr = formatBySecond(totalTime);
   }
 
   onCopy() {

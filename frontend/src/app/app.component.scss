@@ -1,7 +1,6 @@
 :host {
   display: flex;
-  min-width: 600px;
-  min-height: 360px;
+  min-width: 1280px;
   height: 100%;
 }
 
@@ -65,7 +64,7 @@
 .tabs {
   flex-grow: 1;
   background-color: #f3f3f3;
-  overflow: hidden;
+  overflow: auto;
 
   .tab-close-btn {
     color: black;

@@ -21,7 +21,7 @@
       <input class="number-input" style="width: 37px;" type="number" numberOnly min="1" max="99999" value="1" (input)="updateNumberOfProjects($event.target.value)" />
       <label style="color: #3573b5;margin-left: 6px;margin-right: 6px;">生产线:</label>
       <input class="number-input" style="width: 22px;" type="number" numberOnly min="1" max="999" value="1" (input)="updateProductionLines($event.target.value)" />
-      <label style="color: #3573b5;margin-left: 6px;margin-right: 6px;">项目周期/条: {{ totalTime }}</label>
+      <label style="color: #3573b5;margin-left: 6px;margin-right: 6px;">项目周期/条: {{ totalTimeStr }}</label>
     </div>
   </div>
 </div>
@@ -93,7 +93,7 @@
       </span>
       <span style="margin-left: 6px;">成本价/件:
         <strong>
-          <ng-container *ngIf="productCost; else calcTemplete">
+          <ng-container *ngIf="productCost != null; else calcTemplete">
             {{ productCost | number: '1.2-2' }}
           </ng-container>
         </strong>
@@ -111,7 +111,7 @@
     </mat-grid-tile>
     <mat-grid-tile>
       <div class="value">
-        <ng-container *ngIf="materialTotalPrice; else calcTemplete">
+        <ng-container *ngIf="materialTotalPrice != null; else calcTemplete">
           {{ materialTotalPrice | number:'1.2-2' }}
         </ng-container>
       </div>
@@ -121,7 +121,7 @@
     </mat-grid-tile>
     <mat-grid-tile>
       <div class="value">
-        <ng-container *ngIf="productTotalPrice; else calcTemplete">
+        <ng-container *ngIf="productTotalPrice != null; else calcTemplete">
           {{ productTotalPrice | number:'1.2-2' }}
         </ng-container>
       </div>
@@ -131,7 +131,7 @@
     </mat-grid-tile>
     <mat-grid-tile>
       <div class="value">
-        <ng-container *ngIf="totalProfit;else calcTemplete">
+        <ng-container *ngIf="totalProfit != null;else calcTemplete">
           {{ totalProfit | number: '1.2-2' }}
         </ng-container>
       </div>
@@ -141,7 +141,7 @@
     </mat-grid-tile>
     <mat-grid-tile>
       <div class="value">
-        <ng-container *ngIf="profitMargin; else calcTemplete">
+        <ng-container *ngIf="profitMargin != null; else calcTemplete">
           {{ profitMargin | number: '1.2-2' }}%
         </ng-container>
       </div>
