@@ -22,6 +22,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { BonusComponent } from './component/bonus/bonus.component';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatToolbarModule } from '@angular/material/toolbar';
 
 @NgModule({
   declarations: [
@@ -47,7 +49,9 @@ import { MatExpansionModule } from '@angular/material/expansion';
     MatGridListModule,
     MatTooltipModule,
     ClipboardModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatSidenavModule,
+    MatToolbarModule
   ],
   providers: [],
   bootstrap: [AppComponent]

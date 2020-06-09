@@ -1,16 +1,19 @@
-import { Component, ViewChild, ElementRef, OnInit, AfterViewInit } from '@angular/core';
+import { Component, ViewChild, ElementRef, OnInit, AfterViewInit, AfterContentChecked } from '@angular/core';
 import { Observable, fromEvent, timer } from 'rxjs';
 import { BluePrintService } from 'src/service/blue-print.service';
 import { BluePrint } from 'src/service/vo/blue-print';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { debounceTime, timeout } from 'rxjs/operators';
+import { MatIconRegistry } from '@angular/material/icon';
+import { DomSanitizer } from '@angular/platform-browser';
+import { MatToolbar } from '@angular/material/toolbar';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit, AfterViewInit {
+export class AppComponent implements OnInit, AfterViewInit, AfterContentChecked {
 
   title = 'EVE蓝图助手';
 
@@ -25,9 +28,20 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   selectedIndex: number;
 
-  constructor(private bluePrintService: BluePrintService,
-              private snackBar: MatSnackBar) {
+  @ViewChild('toolbar', { static: true })
+  toolbar: MatToolbar;
 
+  toolbarHeight = 0;
+
+  constructor(private bluePrintService: BluePrintService,
+              private snackBar: MatSnackBar,
+              iconRegistry: MatIconRegistry, private sanitizer: DomSanitizer) {
+    iconRegistry.addSvgIcon('github',
+      sanitizer.bypassSecurityTrustResourceUrl('assets/svg/github-circle-white-transparent.svg'));
+
+  }
+  ngAfterContentChecked(): void {
+    this.toolbarHeight = this.toolbar._elementRef.nativeElement.scrollHeight;
   }
 
   ngOnInit(): void {
@@ -77,5 +91,9 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   removeTab(bluePrint: BluePrint) {
     this.selectBluePrints = this.selectBluePrints.filter(item => item.id !== bluePrint.id);
+  }
+
+  calcHeight() {
+    return `calc(100% - ${this.toolbarHeight}px)`;
   }
 }

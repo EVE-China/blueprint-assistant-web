@@ -1,35 +1,46 @@
-<div class="search">
-  <mat-form-field style="margin-top: 6px;">
-    <input matInput name="bluePrintName" #bluePrintName placeholder="蓝图名称">
-  </mat-form-field>
-  <mat-selection-list class="list" [multiple]="false">
-    <cdk-virtual-scroll-viewport itemSize="32" class="virtual-scroll-viewport">
-      <div *cdkVirtualFor="let bluePrint of bluePrints">
-        <mat-list-option class="custom-list-style" (click)="onSelect(bluePrint)">
-          <div class="item">
-            <img [src]="'https://image.evepc.163.com/Type/' + bluePrint.id + '_32.png'">
-            <span>{{ bluePrint.name }}</span>
-          </div>
-        </mat-list-option>
-      </div>
-    </cdk-virtual-scroll-viewport>
-  </mat-selection-list>
-</div>
-<div class="tabs">
-  <mat-tab-group mat-align-tabs="start" [(selectedIndex)]="selectedIndex" animationDuration="0ms">
-    <mat-tab label="First" *ngFor="let bluePrint of selectBluePrints; let i = index">
-      <ng-template mat-tab-label>
-        <div class="col">{{ bluePrint.name }}</div>
-        <ng-container *ngIf="i === selectedIndex">
-          <button class="tab-close-btn" mat-icon-button (click)="removeTab(bluePrint)">
-            <mat-icon>close</mat-icon>
-          </button>
-        </ng-container>
-    </ng-template>
-      <app-blue-print-detail [bluePrint]="bluePrint"></app-blue-print-detail>
-    </mat-tab>
-  </mat-tab-group>
-</div>
-<div class="bonus">
-  <app-bonus></app-bonus>
+<mat-toolbar class="toolbar" #toolbar color="primary">
+  <mat-toolbar-row>
+    <span>EVE蓝图助手 - 测试版</span>
+    <span class="spacer"></span>
+    <a mat-icon-button target="_blank" href="https://github.com/EVE-China/blueprint-assistant-web">
+      <mat-icon aria-label="Go to Repository" svgIcon="github"></mat-icon>
+    </a>
+  </mat-toolbar-row>
+</mat-toolbar>
+<div class="content" [ngStyle]="{ 'height': calcHeight() }">
+  <div class="search">
+    <mat-form-field style="margin-top: 6px;">
+      <input matInput name="bluePrintName" #bluePrintName placeholder="蓝图名称">
+    </mat-form-field>
+    <mat-selection-list class="list" [multiple]="false">
+      <cdk-virtual-scroll-viewport itemSize="32" class="virtual-scroll-viewport">
+        <div *cdkVirtualFor="let bluePrint of bluePrints">
+          <mat-list-option class="custom-list-style" (click)="onSelect(bluePrint)">
+            <div class="item">
+              <img [src]="'https://image.evepc.163.com/Type/' + bluePrint.id + '_32.png'">
+              <span>{{ bluePrint.name }}</span>
+            </div>
+          </mat-list-option>
+        </div>
+      </cdk-virtual-scroll-viewport>
+    </mat-selection-list>
+  </div>
+  <div class="tabs">
+    <mat-tab-group mat-align-tabs="start" [(selectedIndex)]="selectedIndex" animationDuration="0ms">
+      <mat-tab label="First" *ngFor="let bluePrint of selectBluePrints; let i = index">
+        <ng-template mat-tab-label>
+          <div class="col">{{ bluePrint.name }}</div>
+          <ng-container *ngIf="i === selectedIndex">
+            <button class="tab-close-btn" mat-icon-button (click)="removeTab(bluePrint)">
+              <mat-icon>close</mat-icon>
+            </button>
+          </ng-container>
+      </ng-template>
+        <app-blue-print-detail [bluePrint]="bluePrint"></app-blue-print-detail>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+  <div class="bonus">
+    <app-bonus></app-bonus>
+  </div>
 </div>
