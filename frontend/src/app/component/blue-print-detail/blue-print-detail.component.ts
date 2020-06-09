@@ -171,4 +171,12 @@ export class BluePrintDetailComponent implements OnInit {
     }).join('\n');
     this.clipboard.copy(value);
   }
+
+  /**
+   * 将单价更新至最新价格
+   */
+  onPriceRefresh() {
+    this.materials.forEach(material => material.updatePrice());
+    this.product.updatePrice();
+  }
 }

@@ -31,6 +31,9 @@
     <button mat-icon-button aria-label="复制材料清单" matTooltip="复制材料清单" (click)="onCopy()">
       <mat-icon style="color: #3573b5;">file_copy</mat-icon>
     </button>
+    <button mat-icon-button aria-label="更新至最新价格" matTooltip="更新至最新价格" (click)="onPriceRefresh()">
+      <mat-icon style="color: #3573b5;">refresh</mat-icon>
+    </button>
   </div>
   <div class="material-tab">
     <table mat-table [dataSource]="materials" matSort>
