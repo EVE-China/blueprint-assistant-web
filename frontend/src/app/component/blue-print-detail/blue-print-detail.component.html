@@ -101,6 +101,13 @@
           </ng-container>
         </strong>
       </span>
+      <span style="margin-left: 6px;">利润/件:
+        <strong>
+          <ng-container *ngIf="productProfit != null; else calcTemplete">
+            {{ productProfit | number: '1.2-2' }}
+          </ng-container>
+        </strong>
+      </span>
     </div>
   </div>
 </div>
@@ -108,7 +115,7 @@
   <div class="sub-title">
     费用计算
   </div>
-  <mat-grid-list class="grid" cols="4" rowHeight="20px">
+  <mat-grid-list class="grid" cols="8" rowHeight="20px">
     <mat-grid-tile>
       <div class="name">材料预估价格: </div>
     </mat-grid-tile>
@@ -146,6 +153,26 @@
       <div class="value">
         <ng-container *ngIf="profitMargin != null; else calcTemplete">
           {{ profitMargin | number: '1.2-2' }}%
+        </ng-container>
+      </div>
+    </mat-grid-tile>
+    <mat-grid-tile>
+      <div class="name">预估利润/小时: </div>
+    </mat-grid-tile>
+    <mat-grid-tile>
+      <div class="value">
+        <ng-container *ngIf="profitByHour != null; else calcTemplete">
+          {{ profitByHour | number: '1.2-2' }}
+        </ng-container>
+      </div>
+    </mat-grid-tile>
+    <mat-grid-tile>
+      <div class="name">预估利润/天: </div>
+    </mat-grid-tile>
+    <mat-grid-tile>
+      <div class="value">
+        <ng-container *ngIf="profitByDay != null; else calcTemplete">
+          {{ profitByDay | number: '1.2-2' }}
         </ng-container>
       </div>
     </mat-grid-tile>

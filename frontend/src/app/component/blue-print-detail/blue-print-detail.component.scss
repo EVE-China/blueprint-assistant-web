@@ -145,6 +145,10 @@
 .grid {
   cursor: default;
 
+  .name, .value {
+    margin: 1em 0;
+  }
+
   .name {
     width: 100%;
     text-align: right;

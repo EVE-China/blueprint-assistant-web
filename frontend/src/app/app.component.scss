@@ -1,5 +1,6 @@
 :host {
   display: block;
+  min-width: 1280px;
   height: 100%;
 }
 
@@ -15,7 +16,6 @@
 
 .content {
   display: flex;
-  min-width: 1280px;
 
   & ::ng-deep .custom-list-style {
 

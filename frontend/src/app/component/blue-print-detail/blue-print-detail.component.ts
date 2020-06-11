@@ -66,6 +66,11 @@ export class BluePrintDetailComponent implements OnInit {
   productTotalPrice: number;
 
   /**
+   * 产品单件利润
+   */
+  productProfit: number;
+
+  /**
    * 总利润
    */
   totalProfit: number;
@@ -79,6 +84,16 @@ export class BluePrintDetailComponent implements OnInit {
    * 生产总耗时
    */
   totalTimeStr = '计算中';
+
+  /**
+   * 每小时利润
+   */
+  profitByHour: number;
+
+  /**
+   * 每天利润
+   */
+  profitByDay: number;
 
   constructor(private priceService: PriceService, private clipboard: Clipboard) { }
 
@@ -155,14 +170,20 @@ export class BluePrintDetailComponent implements OnInit {
     // 产品总价
     this.productTotalPrice = this.productTotalQuantity * this.product.price.getValue();
     // 产品单个利润
-    const productProfit = this.product.price.getValue() - this.productCost;
+    this.productProfit = this.product.price.getValue() - this.productCost;
     // 总利润
-    this.totalProfit = productProfit * this.productTotalQuantity;
+    this.totalProfit = this.productProfit * this.productTotalQuantity;
     // 利润率
-    this.profitMargin = productProfit / this.productCost * 100;
+    this.profitMargin = this.productProfit / this.productCost * 100;
     // 生产耗时
     const totalTime = this.getResearchTimePercentage() * this.bluePrint.manufacturing.time * this.numberOfProjects;
     this.totalTimeStr = formatBySecond(totalTime);
+    // 每秒利润
+    const profitBySecond = this.totalProfit / totalTime;
+    // 每小时利润
+    this.profitByHour = profitBySecond * 60 * 60;
+    // 每天利润
+    this.profitByDay = this.profitByHour * 24;
   }
 
   onCopy() {
