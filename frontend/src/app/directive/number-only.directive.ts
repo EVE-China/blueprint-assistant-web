@@ -5,6 +5,12 @@ import { Directive, ElementRef, HostListener, Input } from '@angular/core';
 })
 export class NumberOnlyDirective {
 
+  /**
+   * 是否允许小数
+   */
+  @Input()
+  float = false;
+
   @Input()
   min: string;
 
@@ -17,10 +23,11 @@ export class NumberOnlyDirective {
 
   @HostListener('input', ['$event']) onInputChange(event) {
     const initalValue = this._el.nativeElement.value;
-    this._el.nativeElement.value = initalValue.replace(/[^0-9]*/g, '');
+    this._el.nativeElement.value = initalValue.replace(this.getRegex(), '');
     if ( initalValue !== this._el.nativeElement.value) {
       event.stopPropagation();
     }
+
     if (null == initalValue || '' === initalValue) {
       event.stopPropagation();
       this._el.nativeElement.value = this.min;
@@ -36,10 +43,17 @@ export class NumberOnlyDirective {
   }
 
   private getMin(): number {
-    return parseInt(this.min, 10);
+    return parseFloat(this.min);
   }
 
   private getMax(): number {
-    return parseInt(this.max, 10);
+    return parseFloat(this.max);
+  }
+
+  private getRegex() {
+    if (false === this.float || null == this.float) {
+      return /[^0-9]*/g;
+    }
+    return /[^0-9.]*/g;
   }
 }
