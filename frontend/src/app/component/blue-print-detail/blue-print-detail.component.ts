@@ -1,18 +1,19 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { BluePrint } from 'src/service/vo/blue-print';
-import { Subject, of } from 'rxjs';
+import { Subject, of, Subscription } from 'rxjs';
 import { MaterialItem, ProductItem } from './vo';
 import { debounceTime, flatMap } from 'rxjs/operators';
 import { PriceService } from 'src/service/price.service';
 import { formatBySecond } from 'src/utils/time';
 import { Clipboard } from '@angular/cdk/clipboard';
+import { BonusService } from 'src/server/bonus.service';
 
 @Component({
   selector: 'app-blue-print-detail',
   templateUrl: './blue-print-detail.component.html',
   styleUrls: ['./blue-print-detail.component.scss']
 })
-export class BluePrintDetailComponent implements OnInit {
+export class BluePrintDetailComponent implements OnInit, OnDestroy {
 
   @Input()
   bluePrint: BluePrint;
@@ -95,7 +96,16 @@ export class BluePrintDetailComponent implements OnInit {
    */
   profitByDay: number;
 
-  constructor(private priceService: PriceService, private clipboard: Clipboard) { }
+  /**
+   * 加成变更通知
+   */
+  bonusNotifySubscription: Subscription;
+
+  constructor(private priceService: PriceService, private clipboard: Clipboard, private bonusService: BonusService) {
+    this.bonusNotifySubscription = this.bonusService.getChangeNotify().subscribe(() => {
+      this.calc();
+    });
+  }
 
   ngOnInit(): void {
     this.materials = this.bluePrint.manufacturing.materials.map(material => {
@@ -111,6 +121,11 @@ export class BluePrintDetailComponent implements OnInit {
       this.calc();
     });
     this.triggerCalc();
+  }
+
+  ngOnDestroy() {
+    this.calcSubject.complete();
+    this.bonusNotifySubscription.unsubscribe();
   }
 
   updateResearchMaterial(value: string) {
@@ -163,14 +178,16 @@ export class BluePrintDetailComponent implements OnInit {
     .reduce((prev, current) => {
       return prev + current;
     });
+    // 税率
+    const taxRate = 1 - this.bonusService.getTaxRate();
     // 产品总数量
     this.productTotalQuantity = this.product.quantity * this.numberOfProjects * this.productionLines;
     // 产品单个成本
-    this.productCost = this.materialTotalPrice / this.productTotalQuantity;
+    this.productCost = this.materialTotalPrice / this.productTotalQuantity * taxRate;
     // 产品总价
-    this.productTotalPrice = this.productTotalQuantity * this.product.price.getValue();
+    this.productTotalPrice = this.productTotalQuantity * this.product.price.getValue() * taxRate;
     // 产品单个利润
-    this.productProfit = this.product.price.getValue() - this.productCost;
+    this.productProfit = this.product.price.getValue() * taxRate - this.productCost;
     // 总利润
     this.totalProfit = this.productProfit * this.productTotalQuantity;
     // 利润率
