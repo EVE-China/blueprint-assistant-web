@@ -179,15 +179,15 @@ export class BluePrintDetailComponent implements OnInit, OnDestroy {
       return prev + current;
     });
     // 税率
-    const taxRate = 1 - this.bonusService.getTaxRate();
+    const taxRate = 1 + this.bonusService.getTaxRate();
     // 产品总数量
     this.productTotalQuantity = this.product.quantity * this.numberOfProjects * this.productionLines;
     // 产品单个成本
     this.productCost = this.materialTotalPrice / this.productTotalQuantity * taxRate;
     // 产品总价
-    this.productTotalPrice = this.productTotalQuantity * this.product.price.getValue() * taxRate;
+    this.productTotalPrice = this.productTotalQuantity * this.product.price.getValue();
     // 产品单个利润
-    this.productProfit = this.product.price.getValue() * taxRate - this.productCost;
+    this.productProfit = this.product.price.getValue() - this.productCost;
     // 总利润
     this.totalProfit = this.productProfit * this.productTotalQuantity;
     // 利润率

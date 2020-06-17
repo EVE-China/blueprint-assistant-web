@@ -25,10 +25,13 @@ export class BonusService {
 
   setTaxRate(taxRate: number) {
     // 满技能税率5.15%, 没技能10%
-    if (taxRate < 0.0515 || taxRate > 0.1) {
-      throw new Error('税率超出限制');
+    if (taxRate < 0.0515) {
+      this.taxRate = 0.0515;
+    } else if (taxRate > 0.1) {
+      this.taxRate = 0.1;
+    } else {
+      this.taxRate = taxRate;
     }
-    this.taxRate = taxRate;
     this.changeNotify.next();
   }
 
