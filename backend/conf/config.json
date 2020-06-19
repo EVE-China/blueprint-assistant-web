@@ -1,8 +1,0 @@
-{
-  "jdbc": {
-    "provider_class": "io.vertx.ext.jdbc.spi.impl.HikariCPDataSourceProvider",
-    "jdbcUrl": "jdbc:sqlite:conf/eve.db",
-    "driverClassName": "org.sqlite.JDBC",
-    "maximumPoolSize": 30
-  }
-}
