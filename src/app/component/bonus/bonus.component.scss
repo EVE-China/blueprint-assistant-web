@@ -1,0 +1,18 @@
+:host {
+  display: block;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 6px;
+
+  & > * {
+    width: 50%;
+  }
+
+  & > .label {
+    cursor: default;
+  }
+}

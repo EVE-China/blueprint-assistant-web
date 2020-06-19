@@ -1,0 +1,92 @@
+:host {
+  display: block;
+  min-width: 1280px;
+  height: 100%;
+}
+
+.toolbar {
+  position: relative;
+  box-shadow: 0 3px 5px -1px rgba(0,0,0,.2), 0 6px 10px 0 rgba(0,0,0,.14), 0 1px 18px 0 rgba(0,0,0,.12);
+  cursor: default;
+
+  .spacer {
+    flex: 1 1 auto;
+  }
+}
+
+.content {
+  display: flex;
+
+  & ::ng-deep .custom-list-style {
+
+    .mat-list-item-content {
+      padding: 0 5px !important;
+
+      .mat-list-text {
+        padding-right: 0 !important;
+      }
+    }
+  }
+}
+
+.search {
+  width: 220px;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  border-right: 1px solid #a2a2a2;
+
+  .mat-form-field {
+    padding: 0 10px;
+  }
+
+  .list {
+    flex-grow: 1;
+
+    .virtual-scroll-viewport {
+      height: 100%;
+      width: 100%;
+
+      & > ::ng-deep.cdk-virtual-scroll-content-wrapper {
+        width: 100% !important;
+      }
+
+      .item {
+        display: flex;
+        align-items: center;
+
+        img {
+          width: 32px;
+          height: 32px;
+          margin-right: .5em;
+        }
+
+        span {
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          user-select:none;
+          width: 100%;
+        }
+      }
+    }
+  }
+}
+
+.tabs {
+  flex-grow: 1;
+  background-color: #f3f3f3;
+  overflow: auto;
+
+  .tab-close-btn {
+    color: black;
+  }
+}
+
+.bonus {
+  width: 220px;
+  flex-shrink: 0;
+  padding: 6px 6px 0;
+}
