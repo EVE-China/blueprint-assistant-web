@@ -1,9 +1,9 @@
-import { Component, ViewChild, ElementRef, OnInit, AfterViewInit, AfterContentChecked } from '@angular/core';
-import { Observable, fromEvent, timer } from 'rxjs';
+import { Component, ViewChild, ElementRef, OnInit, AfterViewInit, AfterContentChecked, ChangeDetectorRef } from '@angular/core';
+import { fromEvent } from 'rxjs';
 import { BluePrintService } from 'src/service/blue-print.service';
 import { BluePrint } from 'src/service/vo/blue-print';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { debounceTime, timeout } from 'rxjs/operators';
+import { debounceTime } from 'rxjs/operators';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatToolbar } from '@angular/material/toolbar';
@@ -35,10 +35,11 @@ export class AppComponent implements OnInit, AfterViewInit, AfterContentChecked 
 
   constructor(private bluePrintService: BluePrintService,
               private snackBar: MatSnackBar,
-              iconRegistry: MatIconRegistry, private sanitizer: DomSanitizer) {
+              iconRegistry: MatIconRegistry,
+              private sanitizer: DomSanitizer,
+              private changeDetectorRef: ChangeDetectorRef) {
     iconRegistry.addSvgIcon('github',
       sanitizer.bypassSecurityTrustResourceUrl('assets/svg/github-circle-white-transparent.svg'));
-
   }
   ngAfterContentChecked(): void {
     this.toolbarHeight = this.toolbar._elementRef.nativeElement.scrollHeight;
@@ -85,6 +86,7 @@ export class AppComponent implements OnInit, AfterViewInit, AfterContentChecked 
     } else {
       this.selectedIndex = index;
     }
+    this.changeDetectorRef.detectChanges();
   }
 
   removeTab(bluePrint: BluePrint) {
