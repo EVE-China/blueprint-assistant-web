@@ -26,11 +26,11 @@
     </mat-selection-list>
   </div>
   <div class="tabs">
-    <mat-tab-group mat-align-tabs="start" [(selectedIndex)]="selectedIndex">
+    <mat-tab-group style="height: 100%;" mat-align-tabs="start" [(selectedIndex)]="selectedIndex">
       <mat-tab *ngFor="let bluePrint of selectBluePrints; let i = index">
         <ng-template mat-tab-label>
           <div class="col">{{ bluePrint.name }}</div>
-          <button class="tab-close-btn" *ngIf="selectedIndex !== i" mat-icon-button (click)="removeTab(bluePrint)">
+          <button class="tab-close-btn" *ngIf="selectedIndex === i" mat-icon-button (click)="removeTab(bluePrint)">
             <mat-icon>close</mat-icon>
           </button>
         </ng-template>
