@@ -30,121 +30,135 @@
   </div>
 </div>
 <div class="vbox">
-  <!-- 产出 -->
-  <div class="vbox">
-    <div class="hbox sub-title">
-      <span>产出</span>
-    </div>
-    <div class="vbox product">
-      <img class="logo" [src]="'https://image.evepc.163.com/Type/' + product.id + '_64.png'">
-      <span class="name">{{ product.name }}</span>
-      <div class="hbox">
-        <span>数量: <strong>{{ productTotalQuantity }}</strong></span>
-        <span style="margin-left: 6px;">市场单价:
-          <strong>
-            <ng-container *ngIf="product.price.getValue() != -1; else queryTemplete">
-              {{ product.price.getValue() | number: '1.2-2' }}
-            </ng-container>
-          </strong>
-        </span>
-        <span style="margin-left: 6px;">成本价/件:
-          <strong>
-            <ng-container *ngIf="productCost != null; else calcTemplete">
-              {{ productCost | number: '1.2-2' }}
-            </ng-container>
-          </strong>
-        </span>
-        <span style="margin-left: 6px;">利润/件:
-          <strong>
-            <ng-container *ngIf="productProfit != null; else calcTemplete">
-              {{ productProfit | number: '1.2-2' }}
-            </ng-container>
-          </strong>
-        </span>
+  <div class="hbox">
+    <!-- 产出 -->
+    <fieldset class="vbox" style="width: 50%;">
+      <legend class="hbox sub-title">产出</legend>
+      <div class="vbox product">
+        <img class="logo" [src]="'https://image.evepc.163.com/Type/' + product.id + '_64.png'">
+        <span class="name">{{ product.name }}</span>
+        <mat-grid-list class="grid" cols="2" rowHeight="20px" style="width: 100%;">
+          <mat-grid-tile>
+            <div class="name">数量: </div>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <div class="value">{{ productTotalQuantity }}</div>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <div class="name">市场单价: </div>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <div class="value">
+              <ng-container *ngIf="product.price.getValue() != -1; else queryTemplete">
+                {{ product.price.getValue() | number: '1.2-2' }}
+              </ng-container>
+            </div>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <div class="name">成本价/件: </div>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <div class="value">
+              <ng-container *ngIf="productCost != null; else calcTemplete">
+                {{ productCost | number: '1.2-2' }}
+              </ng-container>
+            </div>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <div class="name">利润/件: </div>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <div class="value">
+              <ng-container *ngIf="productProfit != null; else calcTemplete">
+                {{ productProfit | number: '1.2-2' }}
+              </ng-container>
+            </div>
+          </mat-grid-tile>
+        </mat-grid-list>
       </div>
-    </div>
+    </fieldset>
+    <!-- 产出 -->
+    <!-- 费用计算 -->
+    <fieldset class="vbox" style="width: 50%;">
+      <legend class="hbox sub-title">
+        费用计算
+        <button mat-icon-button aria-label="更新至最新价格" matTooltip="更新至最新价格" (click)="onPriceRefresh()">
+          <mat-icon style="color: #3573b5;">refresh</mat-icon>
+        </button>
+      </legend>
+      <mat-grid-list class="grid" cols="2" rowHeight="20px">
+        <mat-grid-tile>
+          <div class="name">材料预估价格: </div>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <div class="value">
+            <ng-container *ngIf="materialTotalPrice != null; else calcTemplete">
+              {{ materialTotalPrice | number:'1.2-2' }}
+            </ng-container>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <div class="name">产出预估价格: </div>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <div class="value">
+            <ng-container *ngIf="productTotalPrice != null; else calcTemplete">
+              {{ productTotalPrice | number:'1.2-2' }}
+            </ng-container>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <div class="name">预估总利润: </div>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <div class="value">
+            <ng-container *ngIf="totalProfit != null;else calcTemplete">
+              {{ totalProfit | number: '1.2-2' }}
+            </ng-container>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <div class="name">预估利润率: </div>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <div class="value">
+            <ng-container *ngIf="profitMargin != null; else calcTemplete">
+              {{ profitMargin | number: '1.2-2' }}%
+            </ng-container>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <div class="name">预估利润/小时: </div>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <div class="value">
+            <ng-container *ngIf="profitByHour != null; else calcTemplete">
+              {{ profitByHour | number: '1.2-2' }}
+            </ng-container>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <div class="name">预估利润/天: </div>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <div class="value">
+            <ng-container *ngIf="profitByDay != null; else calcTemplete">
+              {{ profitByDay | number: '1.2-2' }}
+            </ng-container>
+          </div>
+        </mat-grid-tile>
+      </mat-grid-list>
+    </fieldset>
+    <!-- 费用计算 -->
   </div>
-  <!-- 产出 -->
-  <!-- 费用计算 -->
-  <div class="vbox" style="margin: 1em 0;">
-    <div class="hbox sub-title">
-      费用计算
-      <button mat-icon-button aria-label="更新至最新价格" matTooltip="更新至最新价格" (click)="onPriceRefresh()">
-        <mat-icon style="color: #3573b5;">refresh</mat-icon>
-      </button>
-    </div>
-    <mat-grid-list class="grid" cols="8" rowHeight="20px">
-      <mat-grid-tile>
-        <div class="name">材料预估价格: </div>
-      </mat-grid-tile>
-      <mat-grid-tile>
-        <div class="value">
-          <ng-container *ngIf="materialTotalPrice != null; else calcTemplete">
-            {{ materialTotalPrice | number:'1.2-2' }}
-          </ng-container>
-        </div>
-      </mat-grid-tile>
-      <mat-grid-tile>
-        <div class="name">产出预估价格: </div>
-      </mat-grid-tile>
-      <mat-grid-tile>
-        <div class="value">
-          <ng-container *ngIf="productTotalPrice != null; else calcTemplete">
-            {{ productTotalPrice | number:'1.2-2' }}
-          </ng-container>
-        </div>
-      </mat-grid-tile>
-      <mat-grid-tile>
-        <div class="name">预估总利润: </div>
-      </mat-grid-tile>
-      <mat-grid-tile>
-        <div class="value">
-          <ng-container *ngIf="totalProfit != null;else calcTemplete">
-            {{ totalProfit | number: '1.2-2' }}
-          </ng-container>
-        </div>
-      </mat-grid-tile>
-      <mat-grid-tile>
-        <div class="name">预估利润率: </div>
-      </mat-grid-tile>
-      <mat-grid-tile>
-        <div class="value">
-          <ng-container *ngIf="profitMargin != null; else calcTemplete">
-            {{ profitMargin | number: '1.2-2' }}%
-          </ng-container>
-        </div>
-      </mat-grid-tile>
-      <mat-grid-tile>
-        <div class="name">预估利润/小时: </div>
-      </mat-grid-tile>
-      <mat-grid-tile>
-        <div class="value">
-          <ng-container *ngIf="profitByHour != null; else calcTemplete">
-            {{ profitByHour | number: '1.2-2' }}
-          </ng-container>
-        </div>
-      </mat-grid-tile>
-      <mat-grid-tile>
-        <div class="name">预估利润/天: </div>
-      </mat-grid-tile>
-      <mat-grid-tile>
-        <div class="value">
-          <ng-container *ngIf="profitByDay != null; else calcTemplete">
-            {{ profitByDay | number: '1.2-2' }}
-          </ng-container>
-        </div>
-      </mat-grid-tile>
-    </mat-grid-list>
-  </div>
-  <!-- 费用计算 -->
   <!-- 所需材料 -->
-  <div class="vbox">
-    <div class="hbox sub-title">
+  <fieldset class="vbox">
+    <legend class="hbox sub-title">
       <span>所需材料</span>
       <button mat-icon-button aria-label="复制材料清单" matTooltip="复制材料清单" (click)="onCopy()">
         <mat-icon style="color: #3573b5;">file_copy</mat-icon>
       </button>
-    </div>
+    </legend>
     <div class="material-tab">
       <table mat-table [dataSource]="materials">
         <ng-container matColumnDef="name">
@@ -191,6 +205,6 @@
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
       </table>
     </div>
-  </div>
+  </fieldset>
   <!-- 所需材料 -->
 </div>

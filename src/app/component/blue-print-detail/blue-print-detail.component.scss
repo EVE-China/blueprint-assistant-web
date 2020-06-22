@@ -104,6 +104,7 @@
   font-size: 20px;
   align-items: center;
   cursor: default;
+  line-height: 40px;
 }
 
 .product {
@@ -136,7 +137,7 @@
 
   .value {
     width: 100%;
-    text-align: left;
+    text-align: right;
     font-weight: bold;
   }
 }
