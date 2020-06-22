@@ -34,6 +34,11 @@ export class MaterialItem {
    */
   price = new BehaviorSubject(-1);
 
+  /**
+   * 调整价格
+   */
+  adjustedPrice: number;
+
   constructor(item: Item, private priceService: PriceService, private triggerCalc: () => void) {
     this.id = item.type.id;
     this.name = item.type.name;
@@ -45,7 +50,8 @@ export class MaterialItem {
 
   public updatePrice() {
     this.priceService.query(this.id).subscribe(price => {
-      this.price.next(price);
+      this.price.next(price.min);
+      this.adjustedPrice = price.eiv.adjusted_price;
       this.triggerCalc();
     });
   }
@@ -89,7 +95,7 @@ export class ProductItem {
 
   public updatePrice() {
     this.priceService.query(this.id).subscribe(price => {
-      this.price.next(price);
+      this.price.next(price.min);
       this.triggerCalc();
     });
   }
