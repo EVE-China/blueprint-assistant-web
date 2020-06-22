@@ -6,7 +6,7 @@ import { debounceTime, flatMap } from 'rxjs/operators';
 import { PriceService } from 'src/service/price.service';
 import { formatBySecond } from 'src/utils/time';
 import { Clipboard } from '@angular/cdk/clipboard';
-import { BonusService } from 'src/server/bonus.service';
+import { BonusService } from 'src/service/bonus.service';
 
 @Component({
   selector: 'app-blue-print-detail',

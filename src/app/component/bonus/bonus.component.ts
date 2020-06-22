@@ -1,7 +1,7 @@
 import { Component, OnInit, ElementRef, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { fromEvent } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
-import { BonusService } from 'src/server/bonus.service';
+import { BonusService } from 'src/service/bonus.service';
 import { getBonus, Bonus, saveBonus } from './vo';
 
 @Component({
