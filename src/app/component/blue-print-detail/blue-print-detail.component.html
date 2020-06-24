@@ -88,6 +88,26 @@
       </legend>
       <mat-grid-list class="grid" cols="2" rowHeight="20px">
         <mat-grid-tile>
+          <div class="name">项目配置费/条: </div>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <div class="value">
+            <ng-container *ngIf="projectCost != null; else calcTemplete">
+              {{ projectCost | number:'1.2-2' }}
+            </ng-container>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <div class="name">项目总配置费: </div>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <div class="value">
+            <ng-container *ngIf="projectTotalCost != null; else calcTemplete">
+              {{ projectTotalCost | number:'1.2-2' }}
+            </ng-container>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile>
           <div class="name">材料预估价格: </div>
         </mat-grid-tile>
         <mat-grid-tile>

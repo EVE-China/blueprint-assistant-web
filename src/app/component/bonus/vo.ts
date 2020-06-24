@@ -11,6 +11,11 @@ export class Bonus {
    */
   salesTax: number;
 
+  /**
+   * 星系成本
+   */
+  systemCost: number;
+
   public toJson(): string {
     return JSON.stringify(this);
   }
@@ -28,6 +33,7 @@ export function getBonus(): Bonus {
   if (null == item) {
     bonus.agencyFee = 0.0315;
     bonus.salesTax = 0.0225;
+    bonus.systemCost = 0.15;
     return bonus;
   }
   return JSON.parse(item);

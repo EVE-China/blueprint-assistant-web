@@ -97,6 +97,16 @@ export class BluePrintDetailComponent implements OnInit, OnDestroy {
   profitByDay: number;
 
   /**
+   * 项目总配置费
+   */
+  projectTotalCost: number;
+
+  /**
+   * 项目单条配置费
+   */
+  projectCost: number;
+
+  /**
    * 加成变更通知
    */
   bonusNotifySubscription: Subscription;
@@ -173,11 +183,18 @@ export class BluePrintDetailComponent implements OnInit, OnDestroy {
   }
 
   calc() {
+    // 项目总配置费
+    this.projectTotalCost = this.materials.map(material => material.totalQuantity * material.adjustedPrice)
+      .reduce((prev, current) => {
+        return prev + current;
+      }) * this.bonusService.getSystemCost();
+    // 项目单条配置费
+    this.projectCost = this.projectTotalCost / this.productionLines;
     // 材料总价, 成本价
     this.materialTotalPrice = this.materials.map(material => material.totalQuantity * material.price.getValue())
-    .reduce((prev, current) => {
-      return prev + current;
-    });
+      .reduce((prev, current) => {
+        return prev + current;
+      }) + this.projectTotalCost;
     // 税率
     const taxRate = 1 + this.bonusService.getTaxRate();
     // 产品总数量

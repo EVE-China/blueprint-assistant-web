@@ -17,6 +17,9 @@ export class BonusComponent implements OnInit, AfterViewInit {
   @ViewChild('salesTax')
   salesTaxInput: ElementRef;
 
+  @ViewChild('systemCost')
+  systemCostInput: ElementRef;
+
   /**
    * 中介费
    */
@@ -26,6 +29,11 @@ export class BonusComponent implements OnInit, AfterViewInit {
    * 销售税
    */
   salesTax: number;
+
+  /**
+   * 星系成本
+   */
+  systemCost: number;
 
   constructor(private bonusService: BonusService) {
     // 从存储中获取上次的配置
@@ -50,6 +58,13 @@ export class BonusComponent implements OnInit, AfterViewInit {
         this.salesTax = parseFloat(event.target.value) / 100;
         this.calcTaxRate();
       });
+    fromEvent<any>(this.systemCostInput.nativeElement, 'input')
+      .pipe(debounceTime(300))
+      .subscribe(event => {
+        this.systemCost = parseFloat(event.target.value) / 100;
+        this.bonusService.setSystemCost(this.systemCost);
+        this.save();
+      });
   }
 
   ngOnInit(): void {
@@ -71,6 +86,7 @@ export class BonusComponent implements OnInit, AfterViewInit {
     const bonus = new Bonus();
     bonus.agencyFee = this.agencyFee;
     bonus.salesTax = this.salesTax;
+    bonus.systemCost = this.systemCost;
     saveBonus(bonus);
   }
 }

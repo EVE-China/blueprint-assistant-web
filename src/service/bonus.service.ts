@@ -12,6 +12,11 @@ export class BonusService {
   private taxRate = 0.0515;
 
   /**
+   * 星系成本
+   */
+  private systemCost = 0.15;
+
+  /**
    * 变更通知
    */
   private changeNotify = new Subject<void>();
@@ -37,5 +42,21 @@ export class BonusService {
 
   getTaxRate() {
     return this.taxRate;
+  }
+
+  setSystemCost(systemCost: number) {
+    // TODO 需要确定一下星系成本的最大值
+    if (systemCost < 0) {
+      this.systemCost = 0;
+    } else if (systemCost > 20) {
+      this.systemCost = 20;
+    } else {
+      this.systemCost = systemCost;
+    }
+    this.changeNotify.next();
+  }
+
+  getSystemCost() {
+    return this.systemCost;
   }
 }
