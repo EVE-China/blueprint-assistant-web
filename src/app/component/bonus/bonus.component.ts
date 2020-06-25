@@ -40,12 +40,14 @@ export class BonusComponent implements OnInit, AfterViewInit {
     const bonus = getBonus();
     this.agencyFee = bonus.agencyFee;
     this.salesTax = bonus.salesTax;
+    this.systemCost = bonus.systemCost;
     this.calcTaxRate();
   }
 
   ngAfterViewInit(): void {
     this.agencyFeeInput.nativeElement.value = this.agencyFee * 100;
     this.salesTaxInput.nativeElement.value = this.salesTax * 100;
+    this.systemCostInput.nativeElement.value = this.systemCost * 100;
     fromEvent<any>(this.agencyFeeInput.nativeElement, 'input')
       .pipe(debounceTime(300))
       .subscribe(event => {
