@@ -40,6 +40,8 @@ export class AppComponent implements OnInit, AfterViewInit, AfterContentChecked 
               private changeDetectorRef: ChangeDetectorRef) {
     iconRegistry.addSvgIcon('github',
       sanitizer.bypassSecurityTrustResourceUrl('assets/svg/github-circle-white-transparent.svg'));
+    iconRegistry.addSvgIcon('baidu',
+    sanitizer.bypassSecurityTrustResourceUrl('assets/svg/baidu.svg'));
   }
   ngAfterContentChecked(): void {
     this.toolbarHeight = this.toolbar._elementRef.nativeElement.scrollHeight;
