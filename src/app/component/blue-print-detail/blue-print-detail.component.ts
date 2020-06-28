@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, SimpleChanges, OnChanges } from '@angular/core';
 import { BluePrint } from 'src/service/vo/blue-print';
 import { Subject, of, Subscription } from 'rxjs';
 import { MaterialItem, ProductItem } from './vo';
@@ -13,7 +13,13 @@ import { BonusService } from 'src/service/bonus.service';
   templateUrl: './blue-print-detail.component.html',
   styleUrls: ['./blue-print-detail.component.scss']
 })
-export class BluePrintDetailComponent implements OnInit, OnDestroy {
+export class BluePrintDetailComponent implements OnInit, OnDestroy, OnChanges {
+
+  /**
+   * 是否处于激活状态
+   */
+  @Input()
+  active = true;
 
   @Input()
   bluePrint: BluePrint;
@@ -112,9 +118,6 @@ export class BluePrintDetailComponent implements OnInit, OnDestroy {
   bonusNotifySubscription: Subscription;
 
   constructor(private priceService: PriceService, private clipboard: Clipboard, private bonusService: BonusService) {
-    this.bonusNotifySubscription = this.bonusService.getChangeNotify().subscribe(() => {
-      this.calc();
-    });
   }
 
   ngOnInit(): void {
@@ -130,12 +133,25 @@ export class BluePrintDetailComponent implements OnInit, OnDestroy {
     this.calcSubject.pipe(debounceTime(500)).subscribe(() => {
       this.calc();
     });
-    this.triggerCalc();
   }
 
   ngOnDestroy() {
     this.calcSubject.complete();
-    this.bonusNotifySubscription.unsubscribe();
+    if (null !== this.bonusNotifySubscription) {
+      this.bonusNotifySubscription.unsubscribe();
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.active.currentValue) {
+      this.bonusNotifySubscription = this.bonusService.getChangeNotify().subscribe(() => {
+        this.triggerCalc();
+      });
+      this.triggerCalc();
+    } else {
+      this.bonusNotifySubscription.unsubscribe();
+      this.bonusNotifySubscription = null;
+    }
   }
 
   updateResearchMaterial(value: string) {
