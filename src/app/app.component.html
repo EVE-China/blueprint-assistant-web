@@ -33,7 +33,7 @@
       <mat-tab *ngFor="let bluePrint of selectBluePrints; let i = index">
         <ng-template mat-tab-label>
           <div class="col">{{ bluePrint.name }}</div>
-          <button class="tab-close-btn" *ngIf="selectedIndex === i" mat-icon-button (click)="removeTab(bluePrint)">
+          <button class="tab-close-btn" mat-icon-button (click)="removeTab(bluePrint)">
             <mat-icon>close</mat-icon>
           </button>
         </ng-template>
