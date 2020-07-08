@@ -17,6 +17,11 @@ export class BonusService {
   private systemCost = 0.15;
 
   /**
+   * 设施税
+   */
+  private facilityTax = 0.10;
+
+  /**
    * 变更通知
    */
   private changeNotify = new Subject<void>();
@@ -44,19 +49,18 @@ export class BonusService {
     return this.taxRate;
   }
 
-  setSystemCost(systemCost: number) {
-    // TODO 需要确定一下星系成本的最大值
-    if (systemCost < 0) {
-      this.systemCost = 0;
-    } else if (systemCost > 20) {
-      this.systemCost = 20;
+  setFacilityTax(facilityTax: number) {
+    if (facilityTax < 0.01) {
+      this.facilityTax = 0.01;
+    } else if (facilityTax > 2) {
+      this.facilityTax = 2;
     } else {
-      this.systemCost = systemCost;
+      this.facilityTax = facilityTax;
     }
     this.changeNotify.next();
   }
 
-  getSystemCost() {
-    return this.systemCost;
+  getFacilityTax() {
+    return this.facilityTax;
   }
 }

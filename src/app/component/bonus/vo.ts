@@ -16,6 +16,11 @@ export class Bonus {
    */
   systemCost: number;
 
+  /**
+   * 设施税
+   */
+  facilityTax: number;
+
   public toJson(): string {
     return JSON.stringify(this);
   }
@@ -29,12 +34,27 @@ export function saveBonus(bonus: Bonus) {
 
 export function getBonus(): Bonus {
   const item = localStorage.getItem(BONUS_KEY);
-  const bonus = new Bonus();
+  let bonus = null;
   if (null == item) {
+    bonus = new Bonus();
     bonus.agencyFee = 0.0315;
     bonus.salesTax = 0.0225;
     bonus.systemCost = 0.15;
+    bonus.facilityTax = 0.10;
     return bonus;
   }
-  return JSON.parse(item);
+  bonus = JSON.parse(item) as Bonus;
+  if (null == bonus.agencyFee) {
+    bonus.agencyFee = 0.0315;
+  }
+  if (null == bonus.salesTax) {
+    bonus.salesTax = 0.0225;
+  }
+  if (null == bonus.systemCost) {
+    bonus.systemCost = 0.15;
+  }
+  if (null == bonus.facilityTax) {
+    bonus.facilityTax = 0.10;
+  }
+  return bonus;
 }

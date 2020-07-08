@@ -1,5 +1,5 @@
 import { Component, OnInit, ElementRef, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
-import { fromEvent } from 'rxjs';
+import { fromEvent, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { BonusService } from 'src/service/bonus.service';
 import { getBonus, Bonus, saveBonus } from './vo';
@@ -9,7 +9,9 @@ import { getBonus, Bonus, saveBonus } from './vo';
   templateUrl: './bonus.component.html',
   styleUrls: ['./bonus.component.scss']
 })
-export class BonusComponent implements OnInit, AfterViewInit {
+export class BonusComponent implements OnInit, AfterViewInit, OnDestroy {
+
+  private subscriptions: Subscription[] = [];
 
   @ViewChild('agencyFee')
   agencyFeeInput: ElementRef;
@@ -19,6 +21,9 @@ export class BonusComponent implements OnInit, AfterViewInit {
 
   @ViewChild('systemCost')
   systemCostInput: ElementRef;
+
+  @ViewChild('facilityTax')
+  facilityTaxInput: ElementRef;
 
   /**
    * 中介费
@@ -35,12 +40,18 @@ export class BonusComponent implements OnInit, AfterViewInit {
    */
   systemCost: number;
 
+  /**
+   * 设施税
+   */
+  facilityTax: number;
+
   constructor(private bonusService: BonusService) {
     // 从存储中获取上次的配置
     const bonus = getBonus();
     this.agencyFee = bonus.agencyFee;
     this.salesTax = bonus.salesTax;
     this.systemCost = bonus.systemCost;
+    this.facilityTax = bonus.facilityTax;
     this.calcTaxRate();
   }
 
@@ -48,28 +59,38 @@ export class BonusComponent implements OnInit, AfterViewInit {
     this.agencyFeeInput.nativeElement.value = this.agencyFee * 100;
     this.salesTaxInput.nativeElement.value = this.salesTax * 100;
     this.systemCostInput.nativeElement.value = this.systemCost * 100;
-    fromEvent<any>(this.agencyFeeInput.nativeElement, 'input')
+    this.facilityTaxInput.nativeElement.value = this.facilityTax * 100;
+    this.subscriptions.push(fromEvent<any>(this.agencyFeeInput.nativeElement, 'input')
       .pipe(debounceTime(300))
       .subscribe(event => {
         this.agencyFee = parseFloat(event.target.value) / 100;
         this.calcTaxRate();
-      });
-    fromEvent<any>(this.salesTaxInput.nativeElement, 'input')
+      }));
+    this.subscriptions.push(fromEvent<any>(this.salesTaxInput.nativeElement, 'input')
       .pipe(debounceTime(300))
       .subscribe(event => {
         this.salesTax = parseFloat(event.target.value) / 100;
         this.calcTaxRate();
-      });
-    fromEvent<any>(this.systemCostInput.nativeElement, 'input')
+      }));
+    this.subscriptions.push(fromEvent<any>(this.systemCostInput.nativeElement, 'input')
       .pipe(debounceTime(300))
       .subscribe(event => {
         this.systemCost = parseFloat(event.target.value) / 100;
-        this.bonusService.setSystemCost(this.systemCost);
-        this.save();
-      });
+        this.calcFacilityTax();
+      }));
+    this.subscriptions.push(fromEvent<any>(this.facilityTaxInput.nativeElement, 'input')
+      .pipe(debounceTime(300))
+      .subscribe(event => {
+        this.facilityTax = parseFloat(event.target.value) / 100;
+        this.calcFacilityTax();
+      }));
   }
 
   ngOnInit(): void {
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(v => v.unsubscribe());
   }
 
   /**
@@ -82,6 +103,15 @@ export class BonusComponent implements OnInit, AfterViewInit {
   }
 
   /**
+   * 计算设施税(包含星系成本)
+   */
+  calcFacilityTax() {
+    const tax = this.systemCost * (1 + this.facilityTax);
+    this.bonusService.setFacilityTax(tax);
+    this.save();
+  }
+
+  /**
    * 保存加成配置
    */
   save() {
@@ -89,6 +119,7 @@ export class BonusComponent implements OnInit, AfterViewInit {
     bonus.agencyFee = this.agencyFee;
     bonus.salesTax = this.salesTax;
     bonus.systemCost = this.systemCost;
+    bonus.facilityTax = this.facilityTax;
     saveBonus(bonus);
   }
 }

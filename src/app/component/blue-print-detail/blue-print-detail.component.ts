@@ -203,7 +203,7 @@ export class BluePrintDetailComponent implements OnInit, OnDestroy, OnChanges {
     this.projectTotalCost = this.materials.map(material => material.totalQuantity * material.adjustedPrice)
       .reduce((prev, current) => {
         return prev + current;
-      }) * this.bonusService.getSystemCost();
+      }) * this.bonusService.getFacilityTax();
     // 项目单条配置费
     this.projectCost = this.projectTotalCost / this.productionLines;
     // 材料总价, 成本价
