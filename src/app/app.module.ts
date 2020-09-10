@@ -24,6 +24,7 @@ import { BonusComponent } from './component/bonus/bonus.component';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatSortModule } from '@angular/material/sort';
 
 @NgModule({
   declarations: [
@@ -51,7 +52,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
     ClipboardModule,
     MatExpansionModule,
     MatSidenavModule,
-    MatToolbarModule
+    MatToolbarModule,
+    MatSortModule
   ],
   providers: [],
   bootstrap: [AppComponent]

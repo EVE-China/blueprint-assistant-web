@@ -35,3 +35,11 @@ body { margin: 0; font-family: -apple-system,BlinkMacSystemFont,Helvetica Neue,P
     box-shadow: 0 0 0 2px rgba(24,144,255,.2);
   }
 }
+
+/* 让表格排序表头剧中 */
+th.mat-header-cell.table-sort-head  {
+  text-align: center;
+  & > div.mat-sort-header-container {
+    display: inline-flex;
+  }
+}

@@ -82,7 +82,7 @@
   }
 
   .material-name {
-    display: flex;
+    display: inline-flex;
     flex-direction: row;
     align-items: center;
 
@@ -150,3 +150,11 @@
 // .mat-header-cell, .mat-cell {
 //   padding: 1px !important;
 // }
+
+.table-head {
+  text-align: center;
+}
+
+.table-value {
+  text-align: right;
+}

@@ -1,19 +1,21 @@
-import { Component, OnInit, Input, OnDestroy, SimpleChanges, OnChanges } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, SimpleChanges, OnChanges, ViewChild, AfterViewInit } from '@angular/core';
 import { BluePrint } from 'src/service/vo/blue-print';
 import { Subject, of, Subscription } from 'rxjs';
 import { MaterialItem, ProductItem } from './vo';
-import { debounceTime, flatMap } from 'rxjs/operators';
+import { debounceTime, flatMap, mergeMap } from 'rxjs/operators';
 import { PriceService } from 'src/service/price.service';
 import { formatBySecond } from 'src/utils/time';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { BonusService } from 'src/service/bonus.service';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-blue-print-detail',
   templateUrl: './blue-print-detail.component.html',
   styleUrls: ['./blue-print-detail.component.scss']
 })
-export class BluePrintDetailComponent implements OnInit, OnDestroy, OnChanges {
+export class BluePrintDetailComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit {
 
   /**
    * 是否处于激活状态
@@ -34,9 +36,11 @@ export class BluePrintDetailComponent implements OnInit, OnDestroy, OnChanges {
    */
   researchTime = 20;
 
-  displayedColumns = [ 'name', 'quantity', 'price', 'totalPrice', 'totalVolume' ];
+  displayedColumns = [ 'name', 'quantity', 'price', 'totalPrice', 'totalVolume', 'settings' ];
 
   materials: MaterialItem[] = [];
+
+  dataSource = new MatTableDataSource<MaterialItem>();
 
   calcSubject: Subject<void> = new Subject();
 
@@ -117,6 +121,8 @@ export class BluePrintDetailComponent implements OnInit, OnDestroy, OnChanges {
    */
   bonusNotifySubscription: Subscription;
 
+  @ViewChild(MatSort) sort: MatSort;
+
   constructor(private priceService: PriceService, private clipboard: Clipboard, private bonusService: BonusService) {
   }
 
@@ -126,6 +132,21 @@ export class BluePrintDetailComponent implements OnInit, OnDestroy, OnChanges {
         this.triggerCalc();
       });
     });
+    this.dataSource.data = this.materials;
+    this.dataSource.sortingDataAccessor = (data, id) => {
+      switch (id) {
+        case 'quantity':
+          return this.getTotalQuantity(data);
+        case 'price':
+          return data.price.getValue();
+        case 'totalPrice':
+          return data.price.getValue() * data.totalQuantity;
+        case 'totalVolume':
+          return this.getTotalQuantity(data) * data.volume;
+        default:
+          return data.id;
+      }
+    };
     this.product = new ProductItem(this.bluePrint.manufacturing.product, this.priceService, () => {
       this.triggerCalc();
     });
@@ -133,6 +154,10 @@ export class BluePrintDetailComponent implements OnInit, OnDestroy, OnChanges {
     this.calcSubject.pipe(debounceTime(500)).subscribe(() => {
       this.calc();
     });
+  }
+
+  ngAfterViewInit() {
+    this.dataSource.sort = this.sort;
   }
 
   ngOnDestroy() {
@@ -193,7 +218,7 @@ export class BluePrintDetailComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   getTotalPrice(material: MaterialItem) {
-    return material.price.pipe(flatMap(price => {
+    return material.price.pipe(mergeMap(price => {
       return of(price * material.totalQuantity);
     }));
   }

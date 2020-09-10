@@ -178,11 +178,14 @@
       <button mat-icon-button aria-label="复制材料清单" matTooltip="复制材料清单" (click)="onCopy()">
         <mat-icon style="color: #3573b5;">file_copy</mat-icon>
       </button>
+      <button mat-icon-button aria-label="价格设置" matTooltip="价格设置">
+        <mat-icon style="color: #3573b5;">settings</mat-icon>
+      </button>
     </legend>
     <div class="material-tab">
-      <table mat-table [dataSource]="materials">
+      <table mat-table [dataSource]="dataSource" matSort>
         <ng-container matColumnDef="name">
-          <th mat-header-cell *matHeaderCellDef> 名称 </th>
+          <th mat-header-cell *matHeaderCellDef class="table-head"> 名称 </th>
           <td mat-cell *matCellDef="let element">
             <div class="material-name">
               <img class="material-logo" [src]="'https://image.evepc.163.com/Type/' + element.id + '_64.png'" />
@@ -192,13 +195,13 @@
         </ng-container>
 
         <ng-container matColumnDef="quantity">
-          <th mat-header-cell *matHeaderCellDef> 总数量 </th>
-          <td mat-cell *matCellDef="let element"> {{ getTotalQuantity(element) | number: '1.0-0' }} </td>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="table-sort-head"> 总数量 </th>
+          <td mat-cell *matCellDef="let element" class="table-value"> {{ getTotalQuantity(element) | number: '1.0-0' }} </td>
         </ng-container>
 
         <ng-container matColumnDef="price">
-          <th mat-header-cell *matHeaderCellDef> 市场单价 </th>
-          <td mat-cell *matCellDef="let element">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="table-sort-head"> 市场单价 </th>
+          <td mat-cell *matCellDef="let element" class="table-value">
             <ng-container *ngIf="element.price.getValue() != -1; else queryTemplete">
               {{ element.price | async | number:'1.2-2' }}
             </ng-container>
@@ -206,8 +209,8 @@
         </ng-container>
 
         <ng-container matColumnDef="totalPrice">
-          <th mat-header-cell *matHeaderCellDef> 总价 </th>
-          <td mat-cell *matCellDef="let element">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="table-sort-head"> 总价 </th>
+          <td mat-cell *matCellDef="let element" class="table-value">
             <ng-container *ngIf="element.price.getValue() != -1; else queryTemplete">
               {{ getTotalPrice(element) | async | number:'1.2-2' }}
             </ng-container>
@@ -215,9 +218,16 @@
         </ng-container>
 
         <ng-container matColumnDef="totalVolume">
-          <th mat-header-cell *matHeaderCellDef> 总体积 </th>
-          <td mat-cell *matCellDef="let element">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="table-sort-head"> 总体积 </th>
+          <td mat-cell *matCellDef="let element" class="table-value">
             {{ getTotalQuantity(element) * element.volume | number:'1.2-2' }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="settings">
+          <th mat-header-cell *matHeaderCellDef class="table-head"> 设置 </th>
+          <td mat-cell *matCellDef="let element" class="table-head">
+            设置
           </td>
         </ng-container>
 
