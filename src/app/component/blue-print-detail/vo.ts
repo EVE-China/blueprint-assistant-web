@@ -50,7 +50,7 @@ export class MaterialItem {
 
   public updatePrice() {
     this.priceService.query(this.id).subscribe(price => {
-      this.price.next(price.min);
+      this.price.next(price.sell.min);
       this.adjustedPrice = price.eiv.adjusted_price;
       this.triggerCalc();
     });
@@ -95,7 +95,7 @@ export class ProductItem {
 
   public updatePrice() {
     this.priceService.query(this.id).subscribe(price => {
-      this.price.next(price.min);
+      this.price.next(price.sell.min);
       this.triggerCalc();
     });
   }

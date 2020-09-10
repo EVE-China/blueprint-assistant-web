@@ -37,23 +37,32 @@ export class EIV {
   average_price: number;
 }
 
+export class PriceResponse {
+
+  // 卖价
+  sell: Price;
+
+  // 买价
+  buy: Price;
+
+  /**
+   * 预估价格
+   */
+  eiv: EIV;
+}
+
 /**
  * 价格对象
  */
 export class Price {
 
   /**
-   * 最高卖价
+   * 最高价
    */
   max: number;
 
   /**
-   * 最低卖价
+   * 最低价
    */
   min: number;
-
-  /**
-   * 预估价格
-   */
-  eiv: EIV;
 }

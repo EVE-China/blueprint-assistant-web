@@ -45,6 +45,8 @@ export class BonusComponent implements OnInit, AfterViewInit, OnDestroy {
    */
   facilityTax: number;
 
+  test = 1;
+
   constructor(private bonusService: BonusService) {
     // 从存储中获取上次的配置
     const bonus = getBonus();

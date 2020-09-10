@@ -8,11 +8,8 @@
   align-items: center;
   margin-bottom: 6px;
 
-  & > * {
-    width: 50%;
-  }
-
   & > .label {
     cursor: default;
+    flex-grow: 1;
   }
 }
