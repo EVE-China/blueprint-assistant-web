@@ -17,27 +17,27 @@ export class NumberOnlyDirective {
   @Input()
   max: string;
 
-  constructor(private _el: ElementRef) {
+  constructor(private el: ElementRef) {
 
   }
 
   @HostListener('input', ['$event']) onInputChange(event) {
-    const initalValue = this._el.nativeElement.value;
-    this._el.nativeElement.value = initalValue.replace(this.getRegex(), '');
-    if ( initalValue !== this._el.nativeElement.value) {
+    const initalValue = this.el.nativeElement.value;
+    this.el.nativeElement.value = initalValue.replace(this.getRegex(), '');
+    if ( initalValue !== this.el.nativeElement.value) {
       event.stopPropagation();
     }
 
     if (null == initalValue || '' === initalValue) {
       event.stopPropagation();
-      this._el.nativeElement.value = this.min;
+      this.el.nativeElement.value = this.min;
     }
     if (initalValue < this.getMin() || initalValue > this.getMax()) {
       event.stopPropagation();
       if (initalValue < this.getMin()) {
-        this._el.nativeElement.value = this.min;
+        this.el.nativeElement.value = this.min;
       } else if (initalValue > this.getMax()) {
-        this._el.nativeElement.value = this.max;
+        this.el.nativeElement.value = this.max;
       }
     }
   }
