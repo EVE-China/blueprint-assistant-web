@@ -34,7 +34,7 @@
     </mat-expansion-panel-header>
     <mat-form-field style="width: 100%;" appearance="fill">
       <mat-label>单价获取方式</mat-label>
-      <mat-select [(value)]="test">
+      <mat-select [(value)]="getPriceMethod" (valueChange)="getPriceMethodChange($event)">
         <mat-option [value]="0">
           按最低卖价
         </mat-option>
@@ -46,7 +46,7 @@
   </mat-expansion-panel>
   <mat-expansion-panel>
     <mat-expansion-panel-header>
-      <mat-panel-title>建筑设置</mat-panel-title>
+      <mat-panel-title>建筑设置(开发中)</mat-panel-title>
     </mat-expansion-panel-header>
     <div class="row">
       <div class="label">材料需求降低</div>

@@ -9,6 +9,7 @@ import { Clipboard } from '@angular/cdk/clipboard';
 import { BonusService } from 'src/service/bonus.service';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { GetPriceMethod } from 'src/service/vo/common';
 
 @Component({
   selector: 'app-blue-print-detail',
@@ -121,16 +122,29 @@ export class BluePrintDetailComponent implements OnInit, OnDestroy, OnChanges, A
    */
   bonusNotifySubscription: Subscription;
 
+  /**
+   * 价格获取方式变更通知
+   */
+  getPriceMethodSubscription: Subscription;
+
+  /**
+   * 价格获取方式
+   */
+  getPriceMethod: GetPriceMethod;
+
   @ViewChild(MatSort) sort: MatSort;
 
   constructor(private priceService: PriceService, private clipboard: Clipboard, private bonusService: BonusService) {
+    this.getPriceMethod = priceService.getGetPriceMethod();
   }
 
   ngOnInit(): void {
     this.materials = this.bluePrint.manufacturing.materials.map(material => {
-      return new MaterialItem(material, this.priceService, () => {
+      const item = new MaterialItem(material, this.priceService, () => {
         this.triggerCalc();
       });
+      item.updatePrice(this.getPriceMethod);
+      return item;
     });
     this.dataSource.data = this.materials;
     this.dataSource.sortingDataAccessor = (data, id) => {
@@ -150,8 +164,9 @@ export class BluePrintDetailComponent implements OnInit, OnDestroy, OnChanges, A
     this.product = new ProductItem(this.bluePrint.manufacturing.product, this.priceService, () => {
       this.triggerCalc();
     });
+    this.product.updatePrice();
 
-    this.calcSubject.pipe(debounceTime(500)).subscribe(() => {
+    this.calcSubject.pipe(debounceTime(200)).subscribe(() => {
       this.calc();
     });
   }
@@ -165,12 +180,20 @@ export class BluePrintDetailComponent implements OnInit, OnDestroy, OnChanges, A
     if (null !== this.bonusNotifySubscription) {
       this.bonusNotifySubscription.unsubscribe();
     }
+    if (null !== this.getPriceMethodSubscription) {
+      this.getPriceMethodSubscription.unsubscribe();
+    }
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    // 是否处于激活状态
     if (changes.active.currentValue) {
       this.bonusNotifySubscription = this.bonusService.getChangeNotify().subscribe(() => {
         this.triggerCalc();
+      });
+      this.getPriceMethodSubscription = this.priceService.getPriceMethodChangeNotify().subscribe(() => {
+        this.getPriceMethod = this.priceService.getGetPriceMethod();
+        this.onPriceRefresh();
       });
       this.triggerCalc();
     } else {
@@ -272,7 +295,7 @@ export class BluePrintDetailComponent implements OnInit, OnDestroy, OnChanges, A
    * 将单价更新至最新价格
    */
   onPriceRefresh() {
-    this.materials.forEach(material => material.updatePrice());
+    this.materials.forEach(material => material.updatePrice(this.getPriceMethod));
     this.product.updatePrice();
   }
 }

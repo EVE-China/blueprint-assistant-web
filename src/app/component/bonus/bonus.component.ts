@@ -2,6 +2,8 @@ import { Component, OnInit, ElementRef, ViewChild, AfterViewInit, OnDestroy } fr
 import { fromEvent, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { BonusService } from 'src/service/bonus.service';
+import { PriceService } from 'src/service/price.service';
+import { GetPriceMethod } from 'src/service/vo/common';
 import { getBonus, Bonus, saveBonus } from './vo';
 
 @Component({
@@ -45,9 +47,12 @@ export class BonusComponent implements OnInit, AfterViewInit, OnDestroy {
    */
   facilityTax: number;
 
-  test = 1;
+  /**
+   * 价格获取方式
+   */
+  getPriceMethod = GetPriceMethod.SellMin;
 
-  constructor(private bonusService: BonusService) {
+  constructor(private bonusService: BonusService, private priceService: PriceService) {
     // 从存储中获取上次的配置
     const bonus = getBonus();
     this.agencyFee = bonus.agencyFee;
@@ -111,6 +116,19 @@ export class BonusComponent implements OnInit, AfterViewInit, OnDestroy {
     const tax = this.systemCost * (1 + this.facilityTax);
     this.bonusService.setFacilityTax(tax);
     this.save();
+  }
+
+  getPriceMethodChange(method: number) {
+    switch (method) {
+      case GetPriceMethod.SellMin:
+        this.priceService.setGetPriceMethod(GetPriceMethod.SellMin);
+        break;
+      case GetPriceMethod.BuyMax:
+        this.priceService.setGetPriceMethod(GetPriceMethod.BuyMax);
+        break;
+      default:
+        this.priceService.setGetPriceMethod(GetPriceMethod.SellMin);
+    }
   }
 
   /**

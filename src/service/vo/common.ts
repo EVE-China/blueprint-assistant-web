@@ -66,3 +66,16 @@ export class Price {
    */
   min: number;
 }
+
+export enum GetPriceMethod {
+
+  /**
+   * 按最低卖价
+   */
+  SellMin = 0,
+
+  /**
+   * 按最高买价
+   */
+  BuyMax = 1
+}
