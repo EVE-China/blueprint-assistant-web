@@ -31,6 +31,11 @@ export class Manufacturing {
 export class BluePrint extends Type {
 
   /**
+   * 是否只能拷贝
+   */
+  onlyCopy: boolean;
+
+  /**
    * 产品数量
    */
   maxProductionLimit: number;
